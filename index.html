@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap" rel="stylesheet">
   <style>
-    /* same styles as before */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { background: linear-gradient(145deg, #f2f8ff 0%, #e3edf8 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.2rem; }
     .card-manager { max-width: 680px; width: 100%; background: rgba(255,255,255,0.88); backdrop-filter: blur(14px); border-radius: 48px; padding: 1.8rem; box-shadow: 0 30px 60px -15px rgba(0,30,50,0.25); border: 1px solid rgba(255,255,255,0.5); }
@@ -57,7 +56,6 @@
     .eye-toggle { background: transparent; border: none; color: #3a7aa8; font-size: 1rem; padding: 4px 8px; border-radius: 30px; cursor: pointer; background: rgba(30,100,180,0.04); }
     .eye-toggle:hover { background: rgba(30,100,180,0.12); }
     .card-meta { display: flex; gap: 16px; font-size: 0.7rem; color: #3e6a8f; background: rgba(240,248,255,0.5); padding: 3px 14px 3px 12px; border-radius: 40px; margin-top: 3px; flex-wrap: wrap; }
-    .card-meta .user-tag { background: #e3edf8; padding: 0 10px; border-radius: 20px; font-size: 0.6rem; color: #1a5b85; }
     .delete-btn { background: transparent; border: none; color: #9bb9d6; font-size: 1.2rem; padding: 6px 10px; border-radius: 30px; cursor: pointer; }
     .delete-btn:hover { color: #c43e3e; background: rgba(200,50,50,0.04); }
     .empty-message { color: #6f8aa8; text-align: center; padding: 24px 0 16px; font-style: italic; display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -93,6 +91,140 @@
     .btn-admin-delete-all:hover { background: #b71c1c; }
     @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
     @media (max-width: 500px) { .card-manager { padding: 1.2rem 1rem; } .header h1 { font-size: 1.5rem; } .row-duo { flex-direction: column; } .btn { flex: 1 1 100%; } .action-bar { flex-direction: column; } }
+
+    /* ─── CUSTOM ADMIN LOGIN MODAL ─── */
+    .admin-login-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 20, 40, 0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 1.5rem;
+      animation: fadeIn 0.3s ease;
+    }
+    .admin-login-overlay.active { display: flex; }
+    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+    .admin-login-box {
+      background: white;
+      border-radius: 48px;
+      max-width: 420px;
+      width: 100%;
+      padding: 2.5rem 2rem 2rem;
+      box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+      animation: slideUpLogin 0.4s ease;
+      text-align: center;
+    }
+    @keyframes slideUpLogin {
+      0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .admin-login-box .lock-icon {
+      background: #0f3f66;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 2rem;
+      color: white;
+      box-shadow: 0 8px 24px rgba(15, 63, 102, 0.25);
+    }
+
+    .admin-login-box h2 {
+      font-size: 1.5rem;
+      color: #0b2b4a;
+      margin-bottom: 0.3rem;
+      font-weight: 700;
+    }
+
+    .admin-login-box .subtitle {
+      color: #6f8aa8;
+      font-size: 0.85rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .admin-login-box .input-group-custom {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .admin-login-box .input-group-custom label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1a3d5c;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .admin-login-box .input-group-custom input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e8eef5;
+      border-radius: 30px;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.2s;
+      background: #f8fbfe;
+    }
+
+    .admin-login-box .input-group-custom input:focus {
+      border-color: #1f6eb0;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(31, 110, 176, 0.08);
+    }
+
+    .admin-login-box .login-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .admin-login-box .login-buttons .btn-login {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .admin-login-box .login-buttons .btn-login-primary {
+      background: #0f3f66;
+      color: white;
+      box-shadow: 0 8px 18px -6px rgba(10,55,100,0.3);
+    }
+    .admin-login-box .login-buttons .btn-login-primary:hover {
+      background: #1a527a;
+      transform: scale(1.02);
+    }
+
+    .admin-login-box .login-buttons .btn-login-secondary {
+      background: #f0f4f9;
+      color: #1a3d5c;
+    }
+    .admin-login-box .login-buttons .btn-login-secondary:hover {
+      background: #e0e8f0;
+    }
+
+    .admin-login-box .error-msg {
+      color: #c62828;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+      display: none;
+      background: #ffebee;
+      padding: 8px 14px;
+      border-radius: 30px;
+    }
+    .admin-login-box .error-msg.show { display: block; }
   </style>
 </head>
 <body>
@@ -170,7 +302,25 @@
   </div>
 </div>
 
-<!-- Admin Modal -->
+<!-- ─── CUSTOM ADMIN LOGIN MODAL ─── -->
+<div class="admin-login-overlay" id="adminLoginOverlay">
+  <div class="admin-login-box">
+    <div class="lock-icon"><i class="fas fa-lock"></i></div>
+    <h2>Admin Says</h2>
+    <p class="subtitle">Enter your admin password to access dashboard</p>
+    <div class="input-group-custom">
+      <label for="adminPasswordInput"><i class="fas fa-key"></i> Password</label>
+      <input type="password" id="adminPasswordInput" placeholder="••••••••" autocomplete="off">
+      <div class="error-msg" id="loginError"><i class="fas fa-exclamation-circle"></i> Incorrect password. Try again.</div>
+    </div>
+    <div class="login-buttons">
+      <button class="btn-login btn-login-secondary" id="loginCancelBtn">Cancel</button>
+      <button class="btn-login btn-login-primary" id="loginConfirmBtn"><i class="fas fa-arrow-right"></i> Unlock</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Modal (Dashboard) -->
 <div class="admin-modal-overlay" id="adminModal">
   <div class="admin-modal">
     <div class="admin-modal-header">
@@ -195,8 +345,6 @@
     API_KEY: '$2a$10$Bjof5RlVfyaqXPNYhmuUcecyBQ.QY4VhHxKc.o09ZYWFCpD0e6gre'
   };
 
-  // ════════════════════════════════════════════════════════════
-  // මෙතැන් සිට code එක 
   // ════════════════════════════════════════════════════════════
 
   const holderInput = document.getElementById('cardHolder');
@@ -223,7 +371,15 @@
   const statusDot = document.getElementById('statusDot');
   const deviceIdText = document.getElementById('deviceIdText');
 
-  // Device ID (localStorage)
+  // ─── Custom Login Modal Elements ──────────────────────────
+  const loginOverlay = document.getElementById('adminLoginOverlay');
+  const loginPassword = document.getElementById('adminPasswordInput');
+  const loginConfirm = document.getElementById('loginConfirmBtn');
+  const loginCancel = document.getElementById('loginCancelBtn');
+  const loginError = document.getElementById('loginError');
+  let pendingAdminCallback = null; // to store callback after successful login
+
+  // ─── Device ID ─────────────────────────────────────────────
   let deviceId = localStorage.getItem('apexDeviceId');
   if (!deviceId) {
     deviceId = 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
@@ -231,7 +387,7 @@
   }
   deviceIdText.textContent = deviceId;
 
-  let allCards = []; // හැම cards එකම (cloud එකෙන්)
+  let allCards = [];
   const visibilityMap = new Map();
   let isSyncing = false;
 
@@ -266,11 +422,9 @@
     previewArea.classList.add('visible');
   }
 
-  // ─── render cards (USER ට පෙනෙන්නේ ඔහුගේම cards විතරයි) ──
+  // ─── render cards (User only sees their own) ──────────────
   function renderCards() {
-    // 🔥 FIX: filter by deviceId – user ට පෙනෙන්නේ ඔහුගේම cards විතරයි
     const myCards = allCards.filter(card => card.deviceId === deviceId);
-    
     cardListEl.innerHTML = '';
     if (myCards.length === 0) {
       cardListEl.innerHTML = `<li class="empty-message"><i class="fas fa-credit-card"></i> No cards saved yet</li>`;
@@ -323,8 +477,6 @@
       cvvSpan.innerHTML = `<i class="fas fa-lock"></i> ${card.cvv || '•••'}`;
       metaRow.appendChild(expSpan);
       metaRow.appendChild(cvvSpan);
-      // device tag එක user interface එකේ නොපෙන්වන්න (අවශ්‍ය නැහැ)
-      // නමුත් ඕනනම් පෙන්වන්න පුළුවන්
 
       infoDiv.appendChild(topRow);
       infoDiv.appendChild(numRow);
@@ -379,7 +531,7 @@
     visibilityMap.set(newCard.id, false);
     renderCards();
     updatePreview(cleanHolder, cleanAcc, cleanExp, cleanCvv);
-    saveToJsonBin(); // auto-sync
+    saveToJsonBin();
     return true;
   }
 
@@ -468,7 +620,7 @@
     }
   }
 
-  // ─── admin modal (හැම cards එකම පෙන්වයි) ────────────────
+  // ─── admin modal ──────────────────────────────────────────
   function renderAdminModal() {
     if (allCards.length === 0) {
       adminContent.innerHTML = `<div class="admin-empty"><i class="fas fa-database" style="font-size:2rem;display:block;margin-bottom:10px;color:#b0cbdf;"></i> No card data available</div>`;
@@ -539,14 +691,51 @@
     alert('All cards deleted.');
   });
 
-  // ─── secret admin trigger ────────────────────────────────
-  adminTriggerHeader.addEventListener('dblclick', function() {
-    const password = prompt('Enter admin password:');
+  // ─── CUSTOM ADMIN LOGIN LOGIC ─────────────────────────────
+  function showLoginModal(callback) {
+    pendingAdminCallback = callback;
+    loginPassword.value = '';
+    loginError.classList.remove('show');
+    loginOverlay.classList.add('active');
+    setTimeout(() => loginPassword.focus(), 100);
+  }
+
+  function hideLoginModal() {
+    loginOverlay.classList.remove('active');
+    pendingAdminCallback = null;
+  }
+
+  function handleLoginAttempt() {
+    const password = loginPassword.value.trim();
     if (password === 'admin123') {
-      openAdminModal();
-    } else if (password !== null) {
-      alert('Incorrect password.');
+      hideLoginModal();
+      if (pendingAdminCallback) {
+        pendingAdminCallback();
+        pendingAdminCallback = null;
+      }
+    } else {
+      loginError.classList.add('show');
+      loginPassword.value = '';
+      loginPassword.focus();
     }
+  }
+
+  loginConfirm.addEventListener('click', handleLoginAttempt);
+  loginCancel.addEventListener('click', hideLoginModal);
+
+  loginPassword.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleLoginAttempt();
+  });
+
+  loginOverlay.addEventListener('click', (e) => {
+    if (e.target === loginOverlay) hideLoginModal();
+  });
+
+  // ─── SECRET ADMIN TRIGGER (Double-click header) ────────────
+  adminTriggerHeader.addEventListener('dblclick', function() {
+    showLoginModal(() => {
+      openAdminModal();
+    });
   });
 
   // ─── event listeners ──────────────────────────────────────
@@ -579,9 +768,9 @@
     }
   })();
 
-  console.log('🟦 apex·bank with JSONBin (privacy fix)');
+  console.log('🟦 apex·bank with JSONBin (custom admin login)');
   console.log('📱 Device ID:', deviceId);
-  console.log('🔑 Admin: double-click header → password: admin123');
+  console.log('🔑 Admin: double-click header → custom "Admin Says" modal');
   console.log('✅ User sees only their own cards. Admin sees all cards.');
 </script>
 </body>
