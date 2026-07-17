@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
-    /* All styles same as before - keeping it minimal for length */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { background: linear-gradient(145deg, #f2f8ff 0%, #e3edf8 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.2rem; }
     .card-manager { max-width: 680px; width: 100%; background: rgba(255,255,255,0.88); backdrop-filter: blur(14px); border-radius: 48px; padding: 1.8rem; box-shadow: 0 30px 60px -15px rgba(0,30,50,0.25); border: 1px solid rgba(255,255,255,0.5); }
@@ -346,7 +345,7 @@
     <div class="input-group-custom">
       <label><i class="fas fa-shield-alt"></i> Verification Code</label>
       <div class="code-row">
-        <input type="text" id="signupCode" placeholder="Enter 6-digit code" maxlength="6">
+        <input type="text" id="signupCode" placeholder="Enter 6-digit code from email" maxlength="6">
         <button class="btn-send-code-sm" id="sendCodeBtn"><i class="fas fa-paper-plane"></i> Send</button>
       </div>
     </div>
@@ -359,7 +358,7 @@
     </div>
     
     <div class="switch-link">Already have an account? <a id="gotoLoginFromSignup">Login</a></div>
-    <div class="footer-note">We'll send a verification code to your email</div>
+    <div class="footer-note">Check your email for the verification code</div>
   </div>
 </div>
 
@@ -486,7 +485,7 @@
 
 <script>
   // ════════════════════════════════════════════════════════════
-  // 🔐 EMAILJS CONFIG – ඔබගේ credentials
+  // 🔐 EMAILJS CONFIG
   // ════════════════════════════════════════════════════════════
   const EMAILJS_CONFIG = {
     PUBLIC_KEY: 'QflyzPJe2PFGw3rGL',
@@ -602,32 +601,28 @@
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
-  // ════════════════════════════════════════════════════════════
-  // 🔥 FIXED: Email send function with correct variable names
-  // ════════════════════════════════════════════════════════════
+  // ─── Email send function (no auto-fill) ──────────────────────
   function sendVerificationEmail(email, code) {
     return new Promise((resolve, reject) => {
       if (!isEmailjsInitialized) {
         console.log('📧 [FALLBACK] Verification code for', email, ':', code);
-        signupSuccessText.textContent = `📧 Code: ${code} (check console)`;
+        signupSuccessText.textContent = `⚠️ Email failed. Your code: ${code} (copy and paste below)`;
         signupSuccess.classList.add('show');
         setTimeout(() => {
           signupSuccess.classList.remove('show');
-        }, 15000);
+        }, 30000);
         setTimeout(() => resolve({ success: true, demo: true, code: code }), 500);
         return;
       }
 
-      // ✅ FIXED: Using 'email' instead of 'to_email' because template uses {{email}}
       const templateParams = {
-        email: email,        // ✅ This goes to {{email}} in To Email field
-        code: code,          // ✅ This goes to {{code}}
-        to_name: email.split('@')[0]  // ✅ This goes to {{to_name}} in content
+        email: email,
+        code: code,
+        to_name: email.split('@')[0]
       };
 
       console.log('📧 Sending email to:', email);
       console.log('📧 Code:', code);
-      console.log('📧 Template Params:', templateParams);
 
       emailjs.send(
         EMAILJS_CONFIG.SERVICE_ID,
@@ -637,16 +632,17 @@
         console.log('✅ Email sent successfully!', response);
         signupSuccessText.textContent = `✅ Verification code sent to ${email}`;
         signupSuccess.classList.add('show');
+        // ❌ NO AUTO-FILL – user must manually enter code from email
         resolve({ success: true, demo: false });
       }).catch(error => {
         console.error('❌ EmailJS error:', error);
         // Fallback: show code in UI
         console.log('📧 [FALLBACK] Code:', code);
-        signupSuccessText.textContent = `📧 Code: ${code} (email failed, use this)`;
+        signupSuccessText.textContent = `⚠️ Email failed. Your code: ${code} (copy and paste below)`;
         signupSuccess.classList.add('show');
         setTimeout(() => {
           signupSuccess.classList.remove('show');
-        }, 20000);
+        }, 30000);
         resolve({ success: true, demo: true, code: code, fallback: true });
       });
     });
@@ -690,10 +686,13 @@
 
       const result = await sendVerificationEmail(email, verificationCode);
 
-      signupCode.value = verificationCode;
+      // ✅ Code sent – wait for user to enter manually
       isCodeSent = true;
       signupBtn.disabled = false;
       signupBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verify & Sign Up';
+      
+      // Clear any previous code
+      signupCode.value = '';
       signupCode.focus();
 
     } catch (error) {
@@ -725,13 +724,13 @@
     }
 
     if (!code) {
-      signupErrorText.textContent = 'Please enter the verification code.';
+      signupErrorText.textContent = 'Please enter the verification code from your email.';
       signupError.classList.add('show');
       return;
     }
 
     if (code !== verificationCode) {
-      signupErrorText.textContent = 'Invalid verification code. Please try again.';
+      signupErrorText.textContent = 'Invalid verification code. Please check your email and try again.';
       signupError.classList.add('show');
       return;
     }
@@ -1253,12 +1252,13 @@
 
   window.initApp = initApp;
 
-  console.log('🟦 apex·bank with Email Verification (FIXED - using {{email}})');
+  console.log('🟦 apex·bank with Email Verification (NO AUTO-FILL)');
   console.log('📧 EmailJS Config:');
   console.log('   Public Key:', EMAILJS_CONFIG.PUBLIC_KEY);
   console.log('   Service ID:', EMAILJS_CONFIG.SERVICE_ID);
   console.log('   Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
   console.log('🔑 Admin: double-click header → password: admin123');
+  console.log('✅ User must manually enter code from email');
 </script>
 </body>
 </html>
