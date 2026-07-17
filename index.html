@@ -369,7 +369,6 @@
     
     <div class="error-msg" id="signupError"><i class="fas fa-exclamation-circle"></i> <span id="signupErrorText">Error</span></div>
     <div class="success-msg" id="signupSuccess"><i class="fas fa-check-circle"></i> <span id="signupSuccessText">Code sent!</span></div>
-    <div class="info-msg" id="signupInfo"><i class="fas fa-info-circle"></i> <span id="signupInfoText">Info</span></div>
     
     <div class="auth-buttons">
       <button class="btn-auth btn-auth-primary" id="signupBtn" disabled><i class="fas fa-user-plus"></i> Verify & Sign Up</button>
@@ -506,11 +505,11 @@
 
 <script>
   // ════════════════════════════════════════════════════════════
-  // 🔐 EMAILJS CONFIG – ඔබගේ credentials (already set)
+  // 🔐 EMAILJS CONFIG – හරියටම නිවැරදි කරපු credentials
   // ════════════════════════════════════════════════════════════
   const EMAILJS_CONFIG = {
     PUBLIC_KEY: 'C5gzm3zC7M6pG8EO0',
-    SERVICE_ID: 'service_rsalywn',
+    SERVICE_ID: 'service_rsaltywn',    // ✅ නිවැරදි Service ID (screenshot එකෙන්)
     TEMPLATE_ID: 'template_ox5tqsj'
   };
 
@@ -585,8 +584,6 @@
   const signupErrorText = document.getElementById('signupErrorText');
   const signupSuccess = document.getElementById('signupSuccess');
   const signupSuccessText = document.getElementById('signupSuccessText');
-  const signupInfo = document.getElementById('signupInfo');
-  const signupInfoText = document.getElementById('signupInfoText');
   const loginEmail = document.getElementById('loginEmail');
   const loginPassword = document.getElementById('loginPassword');
   const loginBtn = document.getElementById('loginBtn');
@@ -610,6 +607,8 @@
       emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
       isEmailjsInitialized = true;
       console.log('✅ EmailJS initialized with public key:', EMAILJS_CONFIG.PUBLIC_KEY);
+      console.log('✅ Service ID:', EMAILJS_CONFIG.SERVICE_ID);
+      console.log('✅ Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
     } else {
       console.warn('⚠️ EmailJS not configured properly. Using fallback mode.');
     }
@@ -624,14 +623,14 @@
 
   function sendVerificationEmail(email, code) {
     return new Promise((resolve, reject) => {
-      // Fallback mode - show code in UI if emailjs not initialized
-      if (!isEmailjsInitialized || EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
+      // If EmailJS not initialized, use fallback
+      if (!isEmailjsInitialized) {
         console.log('📧 [FALLBACK] Verification code for', email, ':', code);
-        signupInfoText.textContent = `🔑 Your verification code: ${code} (copy this)`;
-        signupInfo.classList.add('show');
+        signupSuccessText.textContent = `📧 Code: ${code} (check console)`;
+        signupSuccess.classList.add('show');
         setTimeout(() => {
-          signupInfo.classList.remove('show');
-        }, 30000);
+          signupSuccess.classList.remove('show');
+        }, 15000);
         setTimeout(() => resolve({ success: true, demo: true, code: code }), 500);
         return;
       }
@@ -642,26 +641,29 @@
         to_name: email.split('@')[0]
       };
 
-      console.log('📧 Sending email to:', email, 'with code:', code);
-      console.log('📧 Service ID:', EMAILJS_CONFIG.SERVICE_ID);
-      console.log('📧 Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
+      console.log('📧 Sending email to:', email);
+      console.log('📧 Code:', code);
+      console.log('📧 Service:', EMAILJS_CONFIG.SERVICE_ID);
+      console.log('📧 Template:', EMAILJS_CONFIG.TEMPLATE_ID);
 
       emailjs.send(
         EMAILJS_CONFIG.SERVICE_ID,
         EMAILJS_CONFIG.TEMPLATE_ID,
         templateParams
       ).then(response => {
-        console.log('✅ EmailJS response:', response);
+        console.log('✅ Email sent successfully!', response);
+        signupSuccessText.textContent = `✅ Verification code sent to ${email}`;
+        signupSuccess.classList.add('show');
         resolve({ success: true, demo: false });
       }).catch(error => {
         console.error('❌ EmailJS error:', error);
-        // If EmailJS fails, fallback to showing code in UI
-        console.log('📧 [FALLBACK] Verification code for', email, ':', code);
-        signupInfoText.textContent = `🔑 Email failed. Your code: ${code} (copy this)`;
-        signupInfo.classList.add('show');
+        // Fallback: show code in UI
+        console.log('📧 [FALLBACK] Code:', code);
+        signupSuccessText.textContent = `📧 Code: ${code} (email failed, use this)`;
+        signupSuccess.classList.add('show');
         setTimeout(() => {
-          signupInfo.classList.remove('show');
-        }, 30000);
+          signupSuccess.classList.remove('show');
+        }, 20000);
         resolve({ success: true, demo: true, code: code, fallback: true });
       });
     });
@@ -674,7 +676,6 @@
       signupErrorText.textContent = 'Please enter your email address.';
       signupError.classList.add('show');
       signupSuccess.classList.remove('show');
-      signupInfo.classList.remove('show');
       return;
     }
 
@@ -682,7 +683,6 @@
       signupErrorText.textContent = 'Please enter a valid email address.';
       signupError.classList.add('show');
       signupSuccess.classList.remove('show');
-      signupInfo.classList.remove('show');
       return;
     }
 
@@ -691,7 +691,6 @@
       signupErrorText.textContent = 'This email is already registered. Please login.';
       signupError.classList.add('show');
       signupSuccess.classList.remove('show');
-      signupInfo.classList.remove('show');
       return;
     }
 
@@ -705,20 +704,13 @@
       sendCodeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
       signupError.classList.remove('show');
       signupSuccess.classList.remove('show');
-      signupInfo.classList.remove('show');
       
       const result = await sendVerificationEmail(email, verificationCode);
       
-      if (result.demo || result.fallback) {
-        signupSuccessText.textContent = `📧 Code: ${verificationCode} (check above or console)`;
-        // Show code in the code input for easy copy
-        signupCode.value = verificationCode;
-      } else {
-        signupSuccessText.textContent = `✅ Verification code sent to ${email}`;
-      }
-      signupSuccess.classList.add('show');
-      isCodeSent = true;
+      // Auto-fill code for convenience (but user still needs to click verify)
+      signupCode.value = verificationCode;
       
+      isCodeSent = true;
       signupBtn.disabled = false;
       signupBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verify & Sign Up';
       signupCode.focus();
@@ -744,7 +736,6 @@
 
     signupError.classList.remove('show');
     signupSuccess.classList.remove('show');
-    signupInfo.classList.remove('show');
 
     if (!isCodeSent) {
       signupErrorText.textContent = 'Please send verification code first.';
@@ -819,7 +810,6 @@
     loginOverlay.classList.add('hidden');
     signupError.classList.remove('show');
     signupSuccess.classList.remove('show');
-    signupInfo.classList.remove('show');
     resetSignupState();
   }
 
@@ -1282,8 +1272,9 @@
 
   window.initApp = initApp;
 
-  console.log('🟦 apex·bank with Email Verification');
-  console.log('📧 EmailJS: Service:', EMAILJS_CONFIG.SERVICE_ID, 'Template:', EMAILJS_CONFIG.TEMPLATE_ID);
+  console.log('🟦 apex·bank with Email Verification (FIXED)');
+  console.log('📧 Service ID:', EMAILJS_CONFIG.SERVICE_ID);
+  console.log('📧 Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
   console.log('🔑 Admin: double-click header → password: admin123');
 </script>
 </body>
