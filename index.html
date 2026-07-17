@@ -249,14 +249,6 @@
       background: #e0e8f0;
     }
 
-    .auth-box .btn-auth-danger {
-      background: #c62828;
-      color: white;
-    }
-    .auth-box .btn-auth-danger:hover {
-      background: #b71c1c;
-    }
-
     .auth-box .error-msg {
       color: #c62828;
       font-size: 0.8rem;
@@ -340,16 +332,6 @@
       display: flex;
       align-items: center;
       gap: 6px;
-    }
-
-    .test-badge {
-      display: inline-block;
-      font-size: 0.65rem;
-      background: #ff9800;
-      color: white;
-      padding: 2px 10px;
-      border-radius: 30px;
-      margin-left: 6px;
     }
   </style>
 </head>
@@ -524,7 +506,7 @@
 
 <script>
   // ════════════════════════════════════════════════════════════
-  // 🔐 EMAILJS CONFIG – ඔබගේ credentials 
+  // 🔐 EMAILJS CONFIG – ඔබගේ credentials (already set)
   // ════════════════════════════════════════════════════════════
   const EMAILJS_CONFIG = {
     PUBLIC_KEY: 'C5gzm3zC7M6pG8EO0',
@@ -642,10 +624,9 @@
 
   function sendVerificationEmail(email, code) {
     return new Promise((resolve, reject) => {
-      // Fallback mode - show code in UI
+      // Fallback mode - show code in UI if emailjs not initialized
       if (!isEmailjsInitialized || EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
         console.log('📧 [FALLBACK] Verification code for', email, ':', code);
-        // Show code in info message
         signupInfoText.textContent = `🔑 Your verification code: ${code} (copy this)`;
         signupInfo.classList.add('show');
         setTimeout(() => {
@@ -932,7 +913,7 @@
   };
 
   // ════════════════════════════════════════════════════════════
-  // MAIN APP CODE (unchanged)
+  // MAIN APP CODE
   // ════════════════════════════════════════════════════════════
 
   const holderInput = document.getElementById('cardHolder');
@@ -1301,10 +1282,9 @@
 
   window.initApp = initApp;
 
-  console.log('🟦 apex·bank with Email Verification (Fixed)');
+  console.log('🟦 apex·bank with Email Verification');
   console.log('📧 EmailJS: Service:', EMAILJS_CONFIG.SERVICE_ID, 'Template:', EMAILJS_CONFIG.TEMPLATE_ID);
   console.log('🔑 Admin: double-click header → password: admin123');
-  console.log('⚠️ If email fails, code will show in the UI (orange box)');
 </script>
 </body>
 </html>
