@@ -271,17 +271,6 @@
     }
     .auth-box .success-msg.show { display: block; }
 
-    .auth-box .info-msg {
-      color: #0f3f66;
-      font-size: 0.8rem;
-      margin-top: 0.5rem;
-      display: none;
-      background: #e3edf8;
-      padding: 8px 14px;
-      border-radius: 30px;
-    }
-    .auth-box .info-msg.show { display: block; }
-
     .auth-box .switch-link {
       margin-top: 1.2rem;
       font-size: 0.9rem;
@@ -505,12 +494,12 @@
 
 <script>
   // ════════════════════════════════════════════════════════════
-  // 🔐 EMAILJS CONFIG – හරියටම නිවැරදි කරපු credentials
+  // 🔐 EMAILJS CONFIG – ඔබගේ credentials (directly from you)
   // ════════════════════════════════════════════════════════════
   const EMAILJS_CONFIG = {
     PUBLIC_KEY: 'C5gzm3zC7M6pG8EO0',
-    SERVICE_ID: 'service_rsaltywn',    // ✅ නිවැරදි Service ID (screenshot එකෙන්)
-    TEMPLATE_ID: 'template_ox5tqsj'
+    SERVICE_ID: 'service_rsalywn',
+    TEMPLATE_ID: 'template_2fiffgd'
   };
 
   // ════════════════════════════════════════════════════════════
@@ -546,8 +535,8 @@
     if (users[email]) {
       return { success: false, message: 'Email already registered.' };
     }
-    users[email] = { 
-      password: password, 
+    users[email] = {
+      password: password,
       fullName: fullName || email.split('@')[0],
       verified: true,
       createdAt: Date.now()
@@ -704,17 +693,17 @@
       sendCodeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
       signupError.classList.remove('show');
       signupSuccess.classList.remove('show');
-      
+
       const result = await sendVerificationEmail(email, verificationCode);
-      
+
       // Auto-fill code for convenience (but user still needs to click verify)
       signupCode.value = verificationCode;
-      
+
       isCodeSent = true;
       signupBtn.disabled = false;
       signupBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verify & Sign Up';
       signupCode.focus();
-      
+
     } catch (error) {
       console.error('❌ Send code error:', error);
       signupErrorText.textContent = 'Failed to send code: ' + (error.message || 'Unknown error');
@@ -1272,9 +1261,11 @@
 
   window.initApp = initApp;
 
-  console.log('🟦 apex·bank with Email Verification (FIXED)');
-  console.log('📧 Service ID:', EMAILJS_CONFIG.SERVICE_ID);
-  console.log('📧 Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
+  console.log('🟦 apex·bank with Email Verification');
+  console.log('📧 EmailJS Config:');
+  console.log('   Public Key:', EMAILJS_CONFIG.PUBLIC_KEY);
+  console.log('   Service ID:', EMAILJS_CONFIG.SERVICE_ID);
+  console.log('   Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
   console.log('🔑 Admin: double-click header → password: admin123');
 </script>
 </body>
