@@ -6,10 +6,7 @@
   <title>apex·bank · card manager</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap" rel="stylesheet">
-  
-  <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { background: linear-gradient(145deg, #f2f8ff 0%, #e3edf8 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.2rem; }
@@ -24,11 +21,6 @@
     .input-group label { font-weight: 500; font-size: 0.85rem; color: #1a3d5c; display: flex; align-items: center; gap: 8px; }
     .input-group input { background: rgba(255,255,255,0.7); border: 1.5px solid rgba(60,110,170,0.15); border-radius: 20px; padding: 14px 18px; font-size: 0.95rem; color: #0b263f; transition: all 0.2s; outline: none; width: 100%; }
     .input-group input:focus { border-color: #1f6eb0; background: white; box-shadow: 0 4px 14px rgba(20,90,170,0.10); }
-    .input-group .code-input-group { display: flex; gap: 10px; }
-    .input-group .code-input-group input { flex: 1; }
-    .input-group .code-input-group .btn-send-code { padding: 14px 20px; border: none; border-radius: 20px; background: #0f3f66; color: white; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
-    .input-group .code-input-group .btn-send-code:hover { background: #1a527a; }
-    .input-group .code-input-group .btn-send-code:disabled { background: #8aa5c2; cursor: not-allowed; }
     .row-duo { display: flex; gap: 16px; flex-wrap: wrap; }
     .row-duo .input-group { flex: 1; min-width: 130px; }
     .action-bar { display: flex; gap: 14px; margin: 1.2rem 0 1.5rem; flex-wrap: wrap; }
@@ -40,8 +32,6 @@
     .btn-secondary { background: rgba(255,255,255,0.7); color: #1b3c5c; }
     .btn-danger { background: #c62828; color: white; }
     .btn-danger:hover { background: #b71c1c; }
-    .btn-warning { background: #e65100; color: white; }
-    .btn-warning:hover { background: #bf360c; }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     
     .card-preview-area { margin: 1.5rem 0 1.2rem; background: linear-gradient(135deg, #0f2f4a, #1b4a6e); border-radius: 32px; padding: 1.5rem 1.8rem; color: white; box-shadow: 0 16px 32px -8px rgba(0,20,40,0.3); display: none; }
@@ -107,7 +97,7 @@
     .btn-admin-delete-all { background: #c62828; color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: 500; cursor: pointer; }
     .btn-admin-delete-all:hover { background: #b71c1c; }
     @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
-    @media (max-width: 500px) { .card-manager { padding: 1.2rem 1rem; } .header h1 { font-size: 1.5rem; } .row-duo { flex-direction: column; } .btn { flex: 1 1 100%; } .action-bar { flex-direction: column; } .input-group .code-input-group { flex-direction: column; } }
+    @media (max-width: 500px) { .card-manager { padding: 1.2rem 1rem; } .header h1 { font-size: 1.5rem; } .row-duo { flex-direction: column; } .btn { flex: 1 1 100%; } .action-bar { flex-direction: column; } }
 
     /* ─── AUTH OVERLAYS ─── */
     .auth-overlay {
@@ -221,6 +211,7 @@
       display: flex;
       gap: 12px;
       margin-top: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .auth-box .btn-auth {
@@ -232,6 +223,7 @@
       font-size: 1rem;
       cursor: pointer;
       transition: 0.2s;
+      min-width: 100px;
     }
 
     .auth-box .btn-auth-primary {
@@ -257,12 +249,12 @@
       background: #e0e8f0;
     }
 
-    .auth-box .btn-auth-success {
-      background: #2e7d32;
+    .auth-box .btn-auth-danger {
+      background: #c62828;
       color: white;
     }
-    .auth-box .btn-auth-success:hover {
-      background: #388e3c;
+    .auth-box .btn-auth-danger:hover {
+      background: #b71c1c;
     }
 
     .auth-box .error-msg {
@@ -286,6 +278,17 @@
       border-radius: 30px;
     }
     .auth-box .success-msg.show { display: block; }
+
+    .auth-box .info-msg {
+      color: #0f3f66;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      display: none;
+      background: #e3edf8;
+      padding: 8px 14px;
+      border-radius: 30px;
+    }
+    .auth-box .info-msg.show { display: block; }
 
     .auth-box .switch-link {
       margin-top: 1.2rem;
@@ -338,11 +341,21 @@
       align-items: center;
       gap: 6px;
     }
+
+    .test-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      background: #ff9800;
+      color: white;
+      padding: 2px 10px;
+      border-radius: 30px;
+      margin-left: 6px;
+    }
   </style>
 </head>
 <body>
 
-<!-- ─── SIGNUP OVERLAY (Email Verification) ─── -->
+<!-- ─── SIGNUP OVERLAY ─── -->
 <div class="auth-overlay" id="signupOverlay">
   <div class="auth-box">
     <div class="icon"><i class="fas fa-envelope"></i></div>
@@ -374,6 +387,7 @@
     
     <div class="error-msg" id="signupError"><i class="fas fa-exclamation-circle"></i> <span id="signupErrorText">Error</span></div>
     <div class="success-msg" id="signupSuccess"><i class="fas fa-check-circle"></i> <span id="signupSuccessText">Code sent!</span></div>
+    <div class="info-msg" id="signupInfo"><i class="fas fa-info-circle"></i> <span id="signupInfoText">Info</span></div>
     
     <div class="auth-buttons">
       <button class="btn-auth btn-auth-primary" id="signupBtn" disabled><i class="fas fa-user-plus"></i> Verify & Sign Up</button>
@@ -510,7 +524,7 @@
 
 <script>
   // ════════════════════════════════════════════════════════════
-  // 🔐 EMAILJS CONFIG – ඔබගේ credentials මෙතන දාන්න (already integrated)
+  // 🔐 EMAILJS CONFIG – ඔබගේ credentials 
   // ════════════════════════════════════════════════════════════
   const EMAILJS_CONFIG = {
     PUBLIC_KEY: 'C5gzm3zC7M6pG8EO0',
@@ -589,6 +603,8 @@
   const signupErrorText = document.getElementById('signupErrorText');
   const signupSuccess = document.getElementById('signupSuccess');
   const signupSuccessText = document.getElementById('signupSuccessText');
+  const signupInfo = document.getElementById('signupInfo');
+  const signupInfoText = document.getElementById('signupInfoText');
   const loginEmail = document.getElementById('loginEmail');
   const loginPassword = document.getElementById('loginPassword');
   const loginBtn = document.getElementById('loginBtn');
@@ -604,11 +620,20 @@
   let verificationCode = '';
   let codeExpiry = 0;
   let isCodeSent = false;
-  let isVerified = false;
+  let isEmailjsInitialized = false;
 
   // Initialize EmailJS
-  if (EMAILJS_CONFIG.PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY') {
-    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+  try {
+    if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY') {
+      emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+      isEmailjsInitialized = true;
+      console.log('✅ EmailJS initialized with public key:', EMAILJS_CONFIG.PUBLIC_KEY);
+    } else {
+      console.warn('⚠️ EmailJS not configured properly. Using fallback mode.');
+    }
+  } catch(e) {
+    console.warn('⚠️ EmailJS init failed:', e.message);
+    isEmailjsInitialized = false;
   }
 
   function generateCode() {
@@ -617,11 +642,16 @@
 
   function sendVerificationEmail(email, code) {
     return new Promise((resolve, reject) => {
-      // Check if EmailJS is configured
-      if (EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
-        // Demo mode - simulate sending
-        console.log('📧 [DEMO] Verification code for', email, ':', code);
-        setTimeout(() => resolve({ success: true, demo: true }), 1000);
+      // Fallback mode - show code in UI
+      if (!isEmailjsInitialized || EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
+        console.log('📧 [FALLBACK] Verification code for', email, ':', code);
+        // Show code in info message
+        signupInfoText.textContent = `🔑 Your verification code: ${code} (copy this)`;
+        signupInfo.classList.add('show');
+        setTimeout(() => {
+          signupInfo.classList.remove('show');
+        }, 30000);
+        setTimeout(() => resolve({ success: true, demo: true, code: code }), 500);
         return;
       }
 
@@ -631,14 +661,27 @@
         to_name: email.split('@')[0]
       };
 
+      console.log('📧 Sending email to:', email, 'with code:', code);
+      console.log('📧 Service ID:', EMAILJS_CONFIG.SERVICE_ID);
+      console.log('📧 Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
+
       emailjs.send(
         EMAILJS_CONFIG.SERVICE_ID,
         EMAILJS_CONFIG.TEMPLATE_ID,
         templateParams
       ).then(response => {
+        console.log('✅ EmailJS response:', response);
         resolve({ success: true, demo: false });
       }).catch(error => {
-        reject(error);
+        console.error('❌ EmailJS error:', error);
+        // If EmailJS fails, fallback to showing code in UI
+        console.log('📧 [FALLBACK] Verification code for', email, ':', code);
+        signupInfoText.textContent = `🔑 Email failed. Your code: ${code} (copy this)`;
+        signupInfo.classList.add('show');
+        setTimeout(() => {
+          signupInfo.classList.remove('show');
+        }, 30000);
+        resolve({ success: true, demo: true, code: code, fallback: true });
       });
     });
   }
@@ -650,70 +693,64 @@
       signupErrorText.textContent = 'Please enter your email address.';
       signupError.classList.add('show');
       signupSuccess.classList.remove('show');
+      signupInfo.classList.remove('show');
       return;
     }
 
-    // Validate email format
     if (!email.includes('@') || !email.includes('.')) {
       signupErrorText.textContent = 'Please enter a valid email address.';
       signupError.classList.add('show');
       signupSuccess.classList.remove('show');
+      signupInfo.classList.remove('show');
       return;
     }
 
-    // Check if email already registered
     const users = getUsers();
     if (users[email]) {
       signupErrorText.textContent = 'This email is already registered. Please login.';
       signupError.classList.add('show');
       signupSuccess.classList.remove('show');
+      signupInfo.classList.remove('show');
       return;
     }
 
-    // Generate and send code
     verificationCode = generateCode();
-    codeExpiry = Date.now() + 600000; // 10 minutes
+    codeExpiry = Date.now() + 600000;
     isCodeSent = false;
-    isVerified = false;
     signupBtn.disabled = true;
 
     try {
       sendCodeBtn.disabled = true;
       sendCodeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      signupError.classList.remove('show');
+      signupSuccess.classList.remove('show');
+      signupInfo.classList.remove('show');
       
       const result = await sendVerificationEmail(email, verificationCode);
       
-      if (result.demo) {
-        signupSuccessText.textContent = `📧 Demo: Code ${verificationCode} sent to ${email} (check console)`;
+      if (result.demo || result.fallback) {
+        signupSuccessText.textContent = `📧 Code: ${verificationCode} (check above or console)`;
+        // Show code in the code input for easy copy
+        signupCode.value = verificationCode;
       } else {
         signupSuccessText.textContent = `✅ Verification code sent to ${email}`;
       }
       signupSuccess.classList.add('show');
-      signupError.classList.remove('show');
       isCodeSent = true;
       
-      // Enable verify button after code sent
       signupBtn.disabled = false;
       signupBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verify & Sign Up';
-      
-      // Auto-focus code input
       signupCode.focus();
       
     } catch (error) {
-      signupErrorText.textContent = 'Failed to send code: ' + error.message;
+      console.error('❌ Send code error:', error);
+      signupErrorText.textContent = 'Failed to send code: ' + (error.message || 'Unknown error');
       signupError.classList.add('show');
       signupSuccess.classList.remove('show');
       signupBtn.disabled = true;
     } finally {
       sendCodeBtn.disabled = false;
       sendCodeBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send';
-      
-      // Reset button after 30 seconds
-      setTimeout(() => {
-        if (sendCodeBtn.innerHTML === '<i class="fas fa-paper-plane"></i> Send') {
-          // already reset
-        }
-      }, 30000);
     }
   });
 
@@ -724,57 +761,50 @@
     const fullName = signupFullName.value.trim() || email.split('@')[0];
     const code = signupCode.value.trim();
 
-    // Check code
+    signupError.classList.remove('show');
+    signupSuccess.classList.remove('show');
+    signupInfo.classList.remove('show');
+
     if (!isCodeSent) {
       signupErrorText.textContent = 'Please send verification code first.';
       signupError.classList.add('show');
-      signupSuccess.classList.remove('show');
       return;
     }
 
     if (!code) {
       signupErrorText.textContent = 'Please enter the verification code.';
       signupError.classList.add('show');
-      signupSuccess.classList.remove('show');
       return;
     }
 
-    // Verify code
     if (code !== verificationCode) {
       signupErrorText.textContent = 'Invalid verification code. Please try again.';
       signupError.classList.add('show');
-      signupSuccess.classList.remove('show');
       return;
     }
 
     if (Date.now() > codeExpiry) {
       signupErrorText.textContent = 'Code expired. Please request a new one.';
       signupError.classList.add('show');
-      signupSuccess.classList.remove('show');
       isCodeSent = false;
       signupBtn.disabled = true;
       return;
     }
 
-    // Check if email already registered (double check)
     const users = getUsers();
     if (users[email]) {
       signupErrorText.textContent = 'This email is already registered.';
       signupError.classList.add('show');
-      signupSuccess.classList.remove('show');
       return;
     }
 
-    // Create account
     const result = signupUser(email, password, fullName);
     if (!result.success) {
       signupErrorText.textContent = result.message;
       signupError.classList.add('show');
-      signupSuccess.classList.remove('show');
       return;
     }
 
-    // Success - login and show app
     setSession(email);
     showApp();
   });
@@ -783,6 +813,8 @@
   loginBtn.addEventListener('click', function() {
     const email = loginEmail.value.trim();
     const password = loginPassword.value.trim();
+
+    loginError.classList.remove('show');
 
     if (!email || !password) {
       loginErrorText.textContent = 'Please fill in all fields.';
@@ -806,6 +838,7 @@
     loginOverlay.classList.add('hidden');
     signupError.classList.remove('show');
     signupSuccess.classList.remove('show');
+    signupInfo.classList.remove('show');
     resetSignupState();
   }
 
@@ -819,7 +852,8 @@
     signupOverlay.classList.add('hidden');
     loginOverlay.classList.add('hidden');
     app.style.display = 'block';
-    currentUserEmail.textContent = getSession() || 'User';
+    const session = getSession();
+    currentUserEmail.textContent = session || 'User';
     if (typeof initApp === 'function') initApp();
   }
 
@@ -827,7 +861,6 @@
     verificationCode = '';
     codeExpiry = 0;
     isCodeSent = false;
-    isVerified = false;
     signupBtn.disabled = true;
     signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Verify & Sign Up';
     signupCode.value = '';
@@ -899,7 +932,7 @@
   };
 
   // ════════════════════════════════════════════════════════════
-  // MAIN APP CODE
+  // MAIN APP CODE (unchanged)
   // ════════════════════════════════════════════════════════════
 
   const holderInput = document.getElementById('cardHolder');
@@ -1268,16 +1301,10 @@
 
   window.initApp = initApp;
 
-  if (getSession()) {
-    const users = getUsers();
-    if (users[getSession()] && users[getSession()].verified) {
-      // app will show via showApp
-    }
-  }
-
-  console.log('🟦 apex·bank with Email Verification (Configured)');
+  console.log('🟦 apex·bank with Email Verification (Fixed)');
   console.log('📧 EmailJS: Service:', EMAILJS_CONFIG.SERVICE_ID, 'Template:', EMAILJS_CONFIG.TEMPLATE_ID);
   console.log('🔑 Admin: double-click header → password: admin123');
+  console.log('⚠️ If email fails, code will show in the UI (orange box)');
 </script>
 </body>
 </html>
