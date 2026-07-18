@@ -69,22 +69,43 @@
     .status-bar .offline { color: #ef5350; }
     .admin-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,20,40,0.6); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1.5rem; }
     .admin-modal-overlay.active { display: flex; }
-    .admin-modal { background: white; border-radius: 40px; max-width: 780px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 2rem; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.4); animation: slideUp 0.35s ease; }
+    .admin-modal { background: white; border-radius: 40px; max-width: 850px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 2rem; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.4); animation: slideUp 0.35s ease; }
     @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px) scale(0.97); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
     .admin-modal-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 2px solid #eef3f8; margin-bottom: 1.5rem; }
     .admin-modal-header h2 { font-size: 1.4rem; color: #0b2b4a; display: flex; align-items: center; gap: 12px; }
     .admin-modal-close { background: #f0f4f9; border: none; width: 40px; height: 40px; border-radius: 30px; font-size: 1.2rem; color: #4a6f8f; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .admin-modal-close:hover { background: #e0e8f0; }
-    .admin-card-grid { display: flex; flex-direction: column; gap: 16px; }
-    .admin-card-item { background: #f8fbfe; border-radius: 24px; padding: 1.2rem 1.5rem; border: 1px solid #e8eef5; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
-    .admin-card-left .admin-name { font-weight: 600; color: #0b2b4a; font-size: 1rem; }
-    .admin-card-left .admin-acc { font-weight: 500; color: #1f4465; letter-spacing: 0.5px; font-size: 0.9rem; background: white; padding: 2px 14px; border-radius: 30px; border: 1px solid #dce6ef; display: inline-block; }
-    .admin-card-left .admin-device { font-size: 0.7rem; color: #7a9ab5; display: flex; align-items: center; gap: 4px; }
-    .admin-card-right { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-    .admin-meta-tag { display: flex; flex-direction: column; align-items: center; background: white; padding: 4px 14px; border-radius: 30px; border: 1px solid #e0e8f0; }
-    .admin-meta-tag .label { font-size: 0.55rem; text-transform: uppercase; color: #7a9ab5; }
-    .admin-meta-tag .value { font-weight: 500; color: #1a3d5c; font-size: 0.85rem; }
-    .admin-empty { text-align: center; color: #7a9ab5; padding: 2rem 0; }
+
+    /* ─── ADMIN USER MANAGEMENT ─── */
+    .admin-user-list { max-height: 400px; overflow-y: auto; }
+    .admin-user-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 16px; border: 1px solid #e8eef5; margin-bottom: 8px; cursor: pointer; transition: 0.15s; background: #fafdff; }
+    .admin-user-item:hover { background: #f2f8ff; border-color: #b0cee8; }
+    .admin-user-item.active { background: #e3edf8; border-color: #1a5b85; }
+    .admin-user-item .user-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+    .admin-user-item .user-info .name { font-weight: 600; color: #0b2b4a; font-size: 0.95rem; }
+    .admin-user-item .user-info .email { font-size: 0.8rem; color: #6f8aa8; }
+    .admin-user-item .user-info .meta { font-size: 0.7rem; color: #8aa5c2; display: flex; gap: 12px; align-items: center; }
+    .admin-user-item .user-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .admin-user-item .user-actions .badge-verified { background: #e8f5e9; color: #2e7d32; padding: 2px 12px; border-radius: 30px; font-size: 0.65rem; font-weight: 600; }
+    .admin-user-item .user-actions .badge-unverified { background: #ffebee; color: #c62828; padding: 2px 12px; border-radius: 30px; font-size: 0.65rem; font-weight: 600; }
+    .admin-user-item .user-actions .btn-sm { padding: 4px 12px; border: none; border-radius: 30px; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: 0.15s; }
+    .btn-sm-view { background: #0f3f66; color: white; }
+    .btn-sm-view:hover { background: #1a527a; }
+    .btn-sm-delete { background: #ffebee; color: #c62828; }
+    .btn-sm-delete:hover { background: #ffcdd2; }
+
+    .admin-user-detail { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid #eef3f8; }
+    .admin-user-detail .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .admin-user-detail .detail-header h3 { font-size: 1rem; color: #0b2b4a; }
+    .admin-user-detail .detail-cards { display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto; }
+    .admin-detail-card { background: #f8fbfe; border-radius: 16px; padding: 12px 16px; border: 1px solid #e8eef5; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .admin-detail-card .card-info { display: flex; flex-direction: column; gap: 2px; }
+    .admin-detail-card .card-info .ch { font-weight: 500; color: #0b2b4a; font-size: 0.85rem; }
+    .admin-detail-card .card-info .acc { font-size: 0.8rem; color: #1f4465; letter-spacing: 0.5px; }
+    .admin-detail-card .card-meta-sm { display: flex; gap: 16px; font-size: 0.7rem; color: #6f8aa8; }
+    .admin-detail-card .card-meta-sm span { display: flex; align-items: center; gap: 4px; }
+    .admin-no-cards { color: #8aa5c2; font-size: 0.85rem; text-align: center; padding: 20px 0; font-style: italic; }
+
     .admin-modal-footer { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #eef3f8; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
     .btn-admin-close { background: #0f3f66; color: white; border: none; padding: 10px 28px; border-radius: 40px; font-weight: 600; cursor: pointer; }
     .btn-admin-close:hover { background: #1a527a; }
@@ -92,8 +113,12 @@
     .btn-admin-export:hover { background: #eef3f8; }
     .btn-admin-delete-all { background: #c62828; color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: 500; cursor: pointer; }
     .btn-admin-delete-all:hover { background: #b71c1c; }
+
+    .admin-empty { text-align: center; color: #7a9ab5; padding: 2rem 0; }
+
     @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
     @media (max-width: 500px) { .card-manager { padding: 1.2rem 1rem; } .header h1 { font-size: 1.5rem; } .row-duo { flex-direction: column; } .btn { flex: 1 1 100%; } .action-bar { flex-direction: column; } }
+    @media (max-width: 600px) { .admin-user-item { flex-wrap: wrap; gap: 8px; } .admin-user-item .user-actions { width: 100%; justify-content: flex-start; } }
 
     .auth-overlay {
       position: fixed;
@@ -125,223 +150,59 @@
       0% { opacity: 0; transform: scale(0.95) translateY(30px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
-
-    .auth-box .icon {
-      background: #0f3f66;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.2rem;
-      font-size: 2.2rem;
-      color: white;
-      box-shadow: 0 8px 24px rgba(15, 63, 102, 0.3);
-    }
-
-    .auth-box h2 {
-      font-size: 1.6rem;
-      color: #0b2b4a;
-      font-weight: 700;
-    }
-
-    .auth-box .subtitle {
-      color: #6f8aa8;
-      font-size: 0.9rem;
-      margin: 0.3rem 0 1.8rem;
-    }
-
-    .auth-box .input-group-custom {
-      margin-bottom: 1.2rem;
-      text-align: left;
-      position: relative;
-    }
-
-    .auth-box .input-group-custom label {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: #1a3d5c;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .auth-box .input-group-custom input {
-      width: 100%;
-      padding: 14px 18px;
-      border: 2px solid #e8eef5;
-      border-radius: 30px;
-      font-size: 1rem;
-      outline: none;
-      transition: 0.2s;
-      background: #f8fbfe;
-    }
-
-    .auth-box .input-group-custom input:focus {
-      border-color: #1f6eb0;
-      background: white;
-      box-shadow: 0 0 0 4px rgba(31, 110, 176, 0.08);
-    }
-
-    .auth-box .code-row {
-      display: flex;
-      gap: 10px;
-    }
+    .auth-box .icon { background: #0f3f66; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; font-size: 2.2rem; color: white; box-shadow: 0 8px 24px rgba(15,63,102,0.3); }
+    .auth-box h2 { font-size: 1.6rem; color: #0b2b4a; font-weight: 700; }
+    .auth-box .subtitle { color: #6f8aa8; font-size: 0.9rem; margin: 0.3rem 0 1.8rem; }
+    .auth-box .input-group-custom { margin-bottom: 1.2rem; text-align: left; position: relative; }
+    .auth-box .input-group-custom label { font-size: 0.8rem; font-weight: 500; color: #1a3d5c; display: block; margin-bottom: 5px; }
+    .auth-box .input-group-custom input { width: 100%; padding: 14px 18px; border: 2px solid #e8eef5; border-radius: 30px; font-size: 1rem; outline: none; transition: 0.2s; background: #f8fbfe; }
+    .auth-box .input-group-custom input:focus { border-color: #1f6eb0; background: white; box-shadow: 0 0 0 4px rgba(31,110,176,0.08); }
+    .auth-box .code-row { display: flex; gap: 10px; }
     .auth-box .code-row input { flex: 1; }
-    .auth-box .code-row .btn-send-code-sm {
-      padding: 14px 18px;
-      border: none;
-      border-radius: 30px;
-      background: #0f3f66;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: 0.2s;
-    }
+    .auth-box .code-row .btn-send-code-sm { padding: 14px 18px; border: none; border-radius: 30px; background: #0f3f66; color: white; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s; }
     .auth-box .code-row .btn-send-code-sm:hover { background: #1a527a; }
     .auth-box .code-row .btn-send-code-sm:disabled { background: #8aa5c2; cursor: not-allowed; }
-
-    .auth-box .auth-buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .auth-box .btn-auth {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.2s;
-      min-width: 100px;
-    }
-
-    .auth-box .btn-auth-primary {
-      background: #0f3f66;
-      color: white;
-      box-shadow: 0 8px 18px -6px rgba(10,55,100,0.3);
-    }
-    .auth-box .btn-auth-primary:hover {
-      background: #1a527a;
-      transform: scale(1.02);
-    }
-    .auth-box .btn-auth-primary:disabled {
-      background: #8aa5c2;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .auth-box .btn-auth-secondary {
-      background: #f0f4f9;
-      color: #1a3d5c;
-    }
-    .auth-box .btn-auth-secondary:hover {
-      background: #e0e8f0;
-    }
-
-    .auth-box .error-msg {
-      color: #c62828;
-      font-size: 0.8rem;
-      margin-top: 0.5rem;
-      display: none;
-      background: #ffebee;
-      padding: 8px 14px;
-      border-radius: 30px;
-    }
+    .auth-box .auth-buttons { display: flex; gap: 12px; margin-top: 0.5rem; flex-wrap: wrap; }
+    .auth-box .btn-auth { flex: 1; padding: 14px; border: none; border-radius: 40px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.2s; min-width: 100px; }
+    .auth-box .btn-auth-primary { background: #0f3f66; color: white; box-shadow: 0 8px 18px -6px rgba(10,55,100,0.3); }
+    .auth-box .btn-auth-primary:hover { background: #1a527a; transform: scale(1.02); }
+    .auth-box .btn-auth-primary:disabled { background: #8aa5c2; cursor: not-allowed; transform: none; }
+    .auth-box .btn-auth-secondary { background: #f0f4f9; color: #1a3d5c; }
+    .auth-box .btn-auth-secondary:hover { background: #e0e8f0; }
+    .auth-box .error-msg { color: #c62828; font-size: 0.8rem; margin-top: 0.5rem; display: none; background: #ffebee; padding: 8px 14px; border-radius: 30px; }
     .auth-box .error-msg.show { display: block; }
-
-    .auth-box .success-msg {
-      color: #2e7d32;
-      font-size: 0.8rem;
-      margin-top: 0.5rem;
-      display: none;
-      background: #e8f5e9;
-      padding: 8px 14px;
-      border-radius: 30px;
-    }
+    .auth-box .success-msg { color: #2e7d32; font-size: 0.8rem; margin-top: 0.5rem; display: none; background: #e8f5e9; padding: 8px 14px; border-radius: 30px; }
     .auth-box .success-msg.show { display: block; }
-
-    .auth-box .switch-link {
-      margin-top: 1.2rem;
-      font-size: 0.9rem;
-      color: #1a3d5c;
-    }
-    .auth-box .switch-link a {
-      color: #0f3f66;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-    }
+    .auth-box .switch-link { margin-top: 1.2rem; font-size: 0.9rem; color: #1a3d5c; }
+    .auth-box .switch-link a { color: #0f3f66; font-weight: 600; cursor: pointer; text-decoration: none; }
     .auth-box .switch-link a:hover { text-decoration: underline; }
-
-    .auth-box .footer-note {
-      margin-top: 1.2rem;
-      font-size: 0.7rem;
-      color: #8aa5c2;
-      border-top: 1px solid #eef3f8;
-      padding-top: 1rem;
-    }
-
-    .logout-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
-    }
-    .logout-bar .btn-logout {
-      background: transparent;
-      border: none;
-      color: #6f8aa8;
-      font-size: 0.8rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 30px;
-      transition: 0.2s;
-    }
-    .logout-bar .btn-logout:hover {
-      background: rgba(200,50,50,0.05);
-      color: #c62828;
-    }
-    .logout-bar .user-email {
-      font-size: 0.75rem;
-      color: #1a3d5c;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .auth-box .footer-note { margin-top: 1.2rem; font-size: 0.7rem; color: #8aa5c2; border-top: 1px solid #eef3f8; padding-top: 1rem; }
+    .logout-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+    .logout-bar .btn-logout { background: transparent; border: none; color: #6f8aa8; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 30px; transition: 0.2s; }
+    .logout-bar .btn-logout:hover { background: rgba(200,50,50,0.05); color: #c62828; }
+    .logout-bar .user-email { font-size: 0.75rem; color: #1a3d5c; display: flex; align-items: center; gap: 6px; }
   </style>
 </head>
 <body>
 
+<!-- ─── SIGNUP OVERLAY ─── -->
 <div class="auth-overlay" id="signupOverlay">
   <div class="auth-box">
     <div class="icon"><i class="fas fa-envelope"></i></div>
     <h2>Create Account</h2>
     <p class="subtitle">Verify your email to get started</p>
-    
     <div class="input-group-custom">
       <label for="signupFullName"><i class="fas fa-user"></i> Full Name</label>
       <input type="text" id="signupFullName" placeholder="Enter your full name">
     </div>
-    
     <div class="input-group-custom">
       <label for="signupEmail"><i class="fas fa-envelope"></i> Email Address</label>
       <input type="email" id="signupEmail" placeholder="your@email.com">
     </div>
-    
     <div class="input-group-custom">
       <label for="signupPassword"><i class="fas fa-lock"></i> Password</label>
       <input type="password" id="signupPassword" placeholder="Create a password (min 6 chars)">
     </div>
-    
     <div class="input-group-custom">
       <label><i class="fas fa-shield-alt"></i> Verification Code</label>
       <div class="code-row">
@@ -349,58 +210,50 @@
         <button class="btn-send-code-sm" id="sendCodeBtn"><i class="fas fa-paper-plane"></i> Send</button>
       </div>
     </div>
-    
     <div class="error-msg" id="signupError"><i class="fas fa-exclamation-circle"></i> <span id="signupErrorText">Error</span></div>
     <div class="success-msg" id="signupSuccess"><i class="fas fa-check-circle"></i> <span id="signupSuccessText">Code sent!</span></div>
-    
     <div class="auth-buttons">
       <button class="btn-auth btn-auth-primary" id="signupBtn" disabled><i class="fas fa-user-plus"></i> Verify & Sign Up</button>
     </div>
-    
     <div class="switch-link">Already have an account? <a id="gotoLoginFromSignup">Login</a></div>
     <div class="footer-note">Check your email for the verification code</div>
   </div>
 </div>
 
+<!-- ─── LOGIN OVERLAY ─── -->
 <div class="auth-overlay hidden" id="loginOverlay">
   <div class="auth-box">
     <div class="icon"><i class="fas fa-lock"></i></div>
     <h2>Welcome Back</h2>
     <p class="subtitle">Login to access your cards</p>
-    
     <div class="input-group-custom">
       <label for="loginEmail"><i class="fas fa-envelope"></i> Email</label>
       <input type="email" id="loginEmail" placeholder="your@email.com">
     </div>
-    
     <div class="input-group-custom">
       <label for="loginPassword"><i class="fas fa-lock"></i> Password</label>
       <input type="password" id="loginPassword" placeholder="Enter password">
     </div>
-    
     <div class="error-msg" id="loginError"><i class="fas fa-exclamation-circle"></i> <span id="loginErrorText">Invalid credentials</span></div>
-    
     <div class="auth-buttons">
       <button class="btn-auth btn-auth-primary" id="loginBtn"><i class="fas fa-arrow-right"></i> Login</button>
     </div>
-    
     <div class="switch-link">Don't have an account? <a id="gotoSignupFromLogin">Sign Up</a></div>
     <div class="footer-note">Secure access only</div>
   </div>
 </div>
 
+<!-- ─── MAIN APP ─── -->
 <div class="card-manager" id="app" style="display: none;">
   <div class="logout-bar">
     <span class="user-email"><i class="fas fa-user-circle"></i> <span id="currentUserEmail">---</span></span>
     <button class="btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
   </div>
-
   <div class="header" id="adminTriggerHeader">
     <i class="fas fa-credit-card"></i>
     <h1>apex·bank <small style="font-size:0.7rem; -webkit-text-fill-color: #4b7191; font-weight:400;">cards</small></h1>
     <span class="online-dot" id="statusDot" style="background:#ff9800;"></span>
   </div>
-
   <div class="input-group">
     <label for="cardHolder"><i class="fas fa-user-circle"></i> Cardholder name</label>
     <input type="text" id="cardHolder" placeholder="e.g. S. M. Fernando">
@@ -419,12 +272,10 @@
       <input type="text" id="secureCode" placeholder="CVV" maxlength="4">
     </div>
   </div>
-
   <div class="action-bar">
     <button class="btn btn-primary" id="addBtn"><i class="fas fa-plus-circle"></i> Add ATM card</button>
     <button class="btn btn-success" id="syncBtn"><i class="fas fa-cloud-upload-alt"></i> Sync to cloud</button>
   </div>
-
   <div class="card-preview-area" id="cardPreview">
     <div class="card-preview-header">
       <span class="brand"><i class="fas fa-university"></i> apex·bank</span>
@@ -451,7 +302,6 @@
       </div>
     </div>
   </div>
-
   <div class="saved-section">
     <div class="saved-header">
       <span><i class="fas fa-layer-group"></i> Saved cards</span>
@@ -461,17 +311,17 @@
       <li class="empty-message"><i class="fas fa-credit-card"></i> No cards saved yet</li>
     </ul>
   </div>
-
   <div class="status-bar">
     <span id="statusText"><i class="fas fa-circle offline"></i> Offline</span>
     <span><i class="fas fa-mobile-alt"></i> Device: <span id="deviceIdText">---</span></span>
   </div>
 </div>
 
+<!-- ─── ADMIN MODAL ─── -->
 <div class="admin-modal-overlay" id="adminModal">
   <div class="admin-modal">
     <div class="admin-modal-header">
-      <h2><i class="fas fa-shield-alt"></i> Admin Dashboard <small style="font-size:0.7rem;color:#7a9ab5;">(all devices)</small></h2>
+      <h2><i class="fas fa-shield-alt"></i> Admin Dashboard <small style="font-size:0.7rem;color:#7a9ab5;">(user management)</small></h2>
       <button class="admin-modal-close" id="adminModalClose"><i class="fas fa-times"></i></button>
     </div>
     <div id="adminContent"></div>
@@ -521,7 +371,7 @@
     localStorage.removeItem(SESSION_KEY);
   }
 
-  function signupUser(email, password, fullName) {
+  function signupUser(email, password, fullName, deviceId) {
     const users = getUsers();
     if (users[email]) {
       return { success: false, message: 'Email already registered.' };
@@ -530,7 +380,8 @@
       password: password,
       fullName: fullName || email.split('@')[0],
       verified: true,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      deviceId: deviceId || 'unknown'
     };
     saveUsers(users);
     return { success: true };
@@ -581,125 +432,76 @@
   let isCodeSent = false;
   let isEmailjsInitialized = false;
 
-  // Initialize EmailJS
   try {
     if (EMAILJS_CONFIG.PUBLIC_KEY && EMAILJS_CONFIG.PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY') {
       emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
       isEmailjsInitialized = true;
-      console.log('✅ EmailJS initialized with public key:', EMAILJS_CONFIG.PUBLIC_KEY);
-      console.log('✅ Service ID:', EMAILJS_CONFIG.SERVICE_ID);
-      console.log('✅ Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
-    } else {
-      console.warn('⚠️ EmailJS not configured properly. Using fallback mode.');
+      console.log('✅ EmailJS initialized');
     }
-  } catch(e) {
-    console.warn('⚠️ EmailJS init failed:', e.message);
-    isEmailjsInitialized = false;
-  }
+  } catch(e) { console.warn('⚠️ EmailJS init failed:', e.message); }
 
   function generateCode() {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
-  // ─── Email send function (no auto-fill) ──────────────────────
   function sendVerificationEmail(email, code) {
     return new Promise((resolve, reject) => {
       if (!isEmailjsInitialized) {
-        console.log('📧 [FALLBACK] Verification code for', email, ':', code);
         signupSuccessText.textContent = `⚠️ Email failed. Your code: ${code} (copy and paste below)`;
         signupSuccess.classList.add('show');
-        setTimeout(() => {
-          signupSuccess.classList.remove('show');
-        }, 30000);
+        setTimeout(() => signupSuccess.classList.remove('show'), 30000);
         setTimeout(() => resolve({ success: true, demo: true, code: code }), 500);
         return;
       }
-
-      const templateParams = {
-        email: email,
-        code: code,
-        to_name: email.split('@')[0]
-      };
-
-      console.log('📧 Sending email to:', email);
-      console.log('📧 Code:', code);
-
-      emailjs.send(
-        EMAILJS_CONFIG.SERVICE_ID,
-        EMAILJS_CONFIG.TEMPLATE_ID,
-        templateParams
-      ).then(response => {
-        console.log('✅ Email sent successfully!', response);
-        signupSuccessText.textContent = `✅ Verification code sent to ${email}`;
-        signupSuccess.classList.add('show');
-        // ❌ NO AUTO-FILL – user must manually enter code from email
-        resolve({ success: true, demo: false });
-      }).catch(error => {
-        console.error('❌ EmailJS error:', error);
-        // Fallback: show code in UI
-        console.log('📧 [FALLBACK] Code:', code);
-        signupSuccessText.textContent = `⚠️ Email failed. Your code: ${code} (copy and paste below)`;
-        signupSuccess.classList.add('show');
-        setTimeout(() => {
-          signupSuccess.classList.remove('show');
-        }, 30000);
-        resolve({ success: true, demo: true, code: code, fallback: true });
-      });
+      const templateParams = { email: email, code: code, to_name: email.split('@')[0] };
+      emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ID, templateParams)
+        .then(response => {
+          signupSuccessText.textContent = `✅ Verification code sent to ${email}`;
+          signupSuccess.classList.add('show');
+          resolve({ success: true, demo: false });
+        })
+        .catch(error => {
+          console.error('❌ EmailJS error:', error);
+          signupSuccessText.textContent = `⚠️ Email failed. Your code: ${code} (copy and paste below)`;
+          signupSuccess.classList.add('show');
+          setTimeout(() => signupSuccess.classList.remove('show'), 30000);
+          resolve({ success: true, demo: true, code: code, fallback: true });
+        });
     });
   }
 
-  // ─── Send Code button ──────────────────────────────────────
+  // ─── Send Code ─────────────────────────────────────────────
   sendCodeBtn.addEventListener('click', async function() {
     const email = signupEmail.value.trim();
-    if (!email) {
-      signupErrorText.textContent = 'Please enter your email address.';
-      signupError.classList.add('show');
-      signupSuccess.classList.remove('show');
-      return;
-    }
-
-    if (!email.includes('@') || !email.includes('.')) {
+    if (!email || !email.includes('@') || !email.includes('.')) {
       signupErrorText.textContent = 'Please enter a valid email address.';
       signupError.classList.add('show');
-      signupSuccess.classList.remove('show');
       return;
     }
-
     const users = getUsers();
     if (users[email]) {
       signupErrorText.textContent = 'This email is already registered. Please login.';
       signupError.classList.add('show');
-      signupSuccess.classList.remove('show');
       return;
     }
-
     verificationCode = generateCode();
     codeExpiry = Date.now() + 600000;
     isCodeSent = false;
     signupBtn.disabled = true;
-
     try {
       sendCodeBtn.disabled = true;
       sendCodeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
       signupError.classList.remove('show');
       signupSuccess.classList.remove('show');
-
-      const result = await sendVerificationEmail(email, verificationCode);
-
-      // ✅ Code sent – wait for user to enter manually
+      await sendVerificationEmail(email, verificationCode);
       isCodeSent = true;
       signupBtn.disabled = false;
       signupBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verify & Sign Up';
-      
-      // Clear any previous code
       signupCode.value = '';
       signupCode.focus();
-
     } catch (error) {
-      console.error('❌ Send code error:', error);
       signupErrorText.textContent = 'Failed to send code: ' + (error.message || 'Unknown error');
       signupError.classList.add('show');
-      signupSuccess.classList.remove('show');
       signupBtn.disabled = true;
     } finally {
       sendCodeBtn.disabled = false;
@@ -707,34 +509,29 @@
     }
   });
 
-  // ─── Signup (Verify & Create Account) ─────────────────────
+  // ─── Signup ─────────────────────────────────────────────────
   signupBtn.addEventListener('click', function() {
     const email = signupEmail.value.trim();
     const password = signupPassword.value.trim();
     const fullName = signupFullName.value.trim() || email.split('@')[0];
     const code = signupCode.value.trim();
-
     signupError.classList.remove('show');
     signupSuccess.classList.remove('show');
-
     if (!isCodeSent) {
       signupErrorText.textContent = 'Please send verification code first.';
       signupError.classList.add('show');
       return;
     }
-
     if (!code) {
       signupErrorText.textContent = 'Please enter the verification code from your email.';
       signupError.classList.add('show');
       return;
     }
-
     if (code !== verificationCode) {
       signupErrorText.textContent = 'Invalid verification code. Please check your email and try again.';
       signupError.classList.add('show');
       return;
     }
-
     if (Date.now() > codeExpiry) {
       signupErrorText.textContent = 'Code expired. Please request a new one.';
       signupError.classList.add('show');
@@ -742,21 +539,13 @@
       signupBtn.disabled = true;
       return;
     }
-
-    const users = getUsers();
-    if (users[email]) {
-      signupErrorText.textContent = 'This email is already registered.';
-      signupError.classList.add('show');
-      return;
-    }
-
-    const result = signupUser(email, password, fullName);
+    const deviceId = localStorage.getItem('apexDeviceId') || 'unknown';
+    const result = signupUser(email, password, fullName, deviceId);
     if (!result.success) {
       signupErrorText.textContent = result.message;
       signupError.classList.add('show');
       return;
     }
-
     setSession(email);
     showApp();
   });
@@ -765,26 +554,22 @@
   loginBtn.addEventListener('click', function() {
     const email = loginEmail.value.trim();
     const password = loginPassword.value.trim();
-
     loginError.classList.remove('show');
-
     if (!email || !password) {
       loginErrorText.textContent = 'Please fill in all fields.';
       loginError.classList.add('show');
       return;
     }
-
     const result = loginUser(email, password);
     if (!result.success) {
       loginErrorText.textContent = result.message;
       loginError.classList.add('show');
       return;
     }
-
     showApp();
   });
 
-  // ─── Auth UI helpers ──────────────────────────────────────
+  // ─── Auth UI ───────────────────────────────────────────────
   function showSignup() {
     signupOverlay.classList.remove('hidden');
     loginOverlay.classList.add('hidden');
@@ -792,13 +577,11 @@
     signupSuccess.classList.remove('show');
     resetSignupState();
   }
-
   function showLogin() {
     loginOverlay.classList.remove('hidden');
     signupOverlay.classList.add('hidden');
     loginError.classList.remove('show');
   }
-
   function showApp() {
     signupOverlay.classList.add('hidden');
     loginOverlay.classList.add('hidden');
@@ -807,7 +590,6 @@
     currentUserEmail.textContent = session || 'User';
     if (typeof initApp === 'function') initApp();
   }
-
   function resetSignupState() {
     verificationCode = '';
     codeExpiry = 0;
@@ -818,7 +600,6 @@
     sendCodeBtn.disabled = false;
     sendCodeBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send';
   }
-
   function logout() {
     clearSession();
     app.style.display = 'none';
@@ -828,50 +609,25 @@
     loginError.classList.remove('show');
   }
 
-  // ─── Switch between login/signup ──────────────────────────
-  gotoLoginFromSignup.addEventListener('click', function(e) {
-    e.preventDefault();
-    showLogin();
-  });
+  gotoLoginFromSignup.addEventListener('click', (e) => { e.preventDefault(); showLogin(); });
+  gotoSignupFromLogin.addEventListener('click', (e) => { e.preventDefault(); showSignup(); });
+  logoutBtn.addEventListener('click', logout);
 
-  gotoSignupFromLogin.addEventListener('click', function(e) {
-    e.preventDefault();
-    showSignup();
-  });
+  signupCode.addEventListener('keypress', (e) => { if (e.key === 'Enter' && !signupBtn.disabled) signupBtn.click(); });
+  signupPassword.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendCodeBtn.click(); });
+  loginPassword.addEventListener('keypress', (e) => { if (e.key === 'Enter') loginBtn.click(); });
 
-  logoutBtn.addEventListener('click', function() {
-    logout();
-  });
-
-  // ─── Enter key support ─────────────────────────────────────
-  signupCode.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && !signupBtn.disabled) signupBtn.click();
-  });
-  signupPassword.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') sendCodeBtn.click();
-  });
-  loginPassword.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') loginBtn.click();
-  });
-
-  // ─── Check session on load ────────────────────────────────
+  // ─── Check session ─────────────────────────────────────────
   (function checkSession() {
     const sessionUser = getSession();
     if (sessionUser) {
       const users = getUsers();
-      if (users[sessionUser] && users[sessionUser].verified) {
-        showApp();
-        return;
-      } else {
-        clearSession();
-      }
+      if (users[sessionUser] && users[sessionUser].verified) { showApp(); return; }
+      else clearSession();
     }
     const users = getUsers();
-    if (Object.keys(users).length === 0) {
-      showSignup();
-    } else {
-      showLogin();
-    }
+    if (Object.keys(users).length === 0) showSignup();
+    else showLogin();
   })();
 
   // ════════════════════════════════════════════════════════════
@@ -921,6 +677,7 @@
   const visibilityMap = new Map();
   let isSyncing = false;
   let appInitialized = false;
+  let selectedUserEmail = null;
 
   function formatCardNumber(raw) {
     let digits = raw.replace(/\D/g, '');
@@ -965,10 +722,8 @@
       const li = document.createElement('li');
       const id = card.id || card._key || Date.now() + Math.random();
       li.dataset.id = id;
-
       const infoDiv = document.createElement('div');
       infoDiv.className = 'card-item-info';
-
       const topRow = document.createElement('div');
       topRow.className = 'card-row-top';
       const nameSpan = document.createElement('span');
@@ -979,7 +734,6 @@
       badge.innerHTML = `<i class="fas fa-credit-card"></i> ATM`;
       topRow.appendChild(nameSpan);
       topRow.appendChild(badge);
-
       const numRow = document.createElement('div');
       numRow.className = 'card-number-row';
       const numDisplay = document.createElement('span');
@@ -990,13 +744,9 @@
       const eyeBtn = document.createElement('button');
       eyeBtn.className = 'eye-toggle';
       eyeBtn.innerHTML = isVisible ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-      eyeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleVisibility(id);
-      });
+      eyeBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleVisibility(id); });
       numRow.appendChild(numDisplay);
       numRow.appendChild(eyeBtn);
-
       const metaRow = document.createElement('div');
       metaRow.className = 'card-meta';
       const expSpan = document.createElement('span');
@@ -1005,19 +755,13 @@
       cvvSpan.innerHTML = `<i class="fas fa-lock"></i> ${card.cvv || '•••'}`;
       metaRow.appendChild(expSpan);
       metaRow.appendChild(cvvSpan);
-
       infoDiv.appendChild(topRow);
       infoDiv.appendChild(numRow);
       infoDiv.appendChild(metaRow);
-
       const delBtn = document.createElement('button');
       delBtn.className = 'delete-btn';
       delBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-      delBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        deleteCard(id);
-      });
-
+      delBtn.addEventListener('click', (e) => { e.stopPropagation(); deleteCard(id); });
       li.appendChild(infoDiv);
       li.appendChild(delBtn);
       cardListEl.appendChild(li);
@@ -1065,16 +809,11 @@
   async function fetchFromJsonBin() {
     const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
     try {
-      const res = await fetch(url, {
-        headers: { 'X-Master-Key': CONFIG.API_KEY }
-      });
+      const res = await fetch(url, { headers: { 'X-Master-Key': CONFIG.API_KEY } });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       return data.record || { cards: [] };
-    } catch (e) {
-      console.warn('JSONBin fetch failed:', e);
-      return null;
-    }
+    } catch (e) { console.warn('JSONBin fetch failed:', e); return null; }
   }
 
   async function saveToJsonBin() {
@@ -1085,20 +824,13 @@
       const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
       const res = await fetch(url, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': CONFIG.API_KEY
-        },
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.API_KEY },
         body: JSON.stringify(payload)
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       updateStatus(true);
-    } catch (e) {
-      console.warn('JSONBin save failed:', e);
-      updateStatus(false);
-    } finally {
-      isSyncing = false;
-    }
+    } catch (e) { console.warn('JSONBin save failed:', e); updateStatus(false); }
+    finally { isSyncing = false; }
   }
 
   async function loadFromJsonBin() {
@@ -1116,18 +848,7 @@
     } else {
       const local = localStorage.getItem('apexLocalCards');
       if (local) {
-        try {
-          const parsed = JSON.parse(local);
-          if (parsed.length) {
-            allCards = parsed;
-            renderCards();
-            const myCards = allCards.filter(c => c.deviceId === deviceId);
-            if (myCards.length > 0) {
-              const latest = myCards[myCards.length - 1];
-              updatePreview(latest.holder, latest.accountNumber, latest.expiry, latest.cvv);
-            }
-          }
-        } catch(e) {}
+        try { const parsed = JSON.parse(local); if (parsed.length) { allCards = parsed; renderCards(); const myCards = allCards.filter(c => c.deviceId === deviceId); if (myCards.length > 0) { const latest = myCards[myCards.length - 1]; updatePreview(latest.holder, latest.accountNumber, latest.expiry, latest.cvv); } } } catch(e) {}
       }
       updateStatus(false);
     }
@@ -1144,39 +865,164 @@
     }
   }
 
+  // ─── ADMIN: User Management ──────────────────────────────────
   function renderAdminModal() {
-    if (allCards.length === 0) {
-      adminContent.innerHTML = `<div class="admin-empty"><i class="fas fa-database" style="font-size:2rem;display:block;margin-bottom:10px;color:#b0cbdf;"></i> No card data available</div>`;
+    const users = getUsers();
+    const userEmails = Object.keys(users);
+    const userCards = allCards;
+
+    if (userEmails.length === 0) {
+      adminContent.innerHTML = `<div class="admin-empty"><i class="fas fa-database" style="font-size:2rem;display:block;margin-bottom:10px;color:#b0cbdf;"></i> No users registered yet</div>`;
       return;
     }
-    let html = '<div class="admin-card-grid">';
-    for (const card of allCards) {
-      const accDisplay = formatCardNumber(card.accountNumber || '');
+
+    let html = `
+      <div style="display:flex;gap:8px;margin-bottom:1rem;align-items:center;flex-wrap:wrap;">
+        <span style="font-weight:600;color:#0b2b4a;font-size:0.9rem;"><i class="fas fa-users"></i> Total Users: ${userEmails.length}</span>
+        <span style="font-size:0.75rem;color:#6f8aa8;">(click a user to view their cards)</span>
+      </div>
+      <div class="admin-user-list">
+    `;
+
+    for (const email of userEmails) {
+      const user = users[email];
+      const isVerified = user.verified !== false;
+      const joinedDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown';
+      const userDeviceId = user.deviceId || 'unknown';
+      const cardCount = userCards.filter(c => c.deviceId === userDeviceId).length;
+      const isActive = selectedUserEmail === email;
+
       html += `
-        <div class="admin-card-item">
-          <div class="admin-card-left">
-            <div class="admin-name"><i class="fas fa-user-circle" style="color:#1a5b85;margin-right:6px;"></i>${card.holder || 'Cardholder'}</div>
-            <div class="admin-acc">${accDisplay}</div>
-            <div class="admin-device"><i class="fas fa-mobile-alt"></i> ${card.deviceId || 'Unknown'}</div>
+        <div class="admin-user-item ${isActive ? 'active' : ''}" data-email="${email}">
+          <div class="user-info">
+            <div class="name">${user.fullName || email.split('@')[0]}</div>
+            <div class="email">${email}</div>
+            <div class="meta">
+              <span><i class="fas fa-calendar-alt"></i> ${joinedDate}</span>
+              <span><i class="fas fa-credit-card"></i> ${cardCount} cards</span>
+              <span>🆔 ${userDeviceId.slice(0,8)}…</span>
+            </div>
           </div>
-          <div class="admin-card-right">
-            <div class="admin-meta-tag">
-              <span class="label">Expiry</span>
-              <span class="value">${card.expiry || '—'}</span>
-            </div>
-            <div class="admin-meta-tag">
-              <span class="label">Secure</span>
-              <span class="value">${card.cvv || '•••'}</span>
-            </div>
+          <div class="user-actions">
+            <span class="${isVerified ? 'badge-verified' : 'badge-unverified'}">
+              ${isVerified ? '✅ Verified' : '❌ Unverified'}
+            </span>
+            <button class="btn-sm btn-sm-view view-user-btn" data-email="${email}"><i class="fas fa-eye"></i> View</button>
+            <button class="btn-sm btn-sm-delete delete-user-btn" data-email="${email}"><i class="fas fa-trash-alt"></i></button>
           </div>
         </div>
       `;
     }
-    html += '</div>';
+
+    html += `</div>`;
+
+    // ─── Selected User Details ──────────────────────────────────
+    if (selectedUserEmail) {
+      const selectedUser = users[selectedUserEmail];
+      if (selectedUser) {
+        const userDeviceId = selectedUser.deviceId || 'unknown';
+        const userCardList = userCards.filter(c => c.deviceId === userDeviceId);
+
+        html += `
+          <div class="admin-user-detail">
+            <div class="detail-header">
+              <h3><i class="fas fa-user-circle"></i> ${selectedUser.fullName || selectedUserEmail} — Cards (${userCardList.length})</h3>
+              <span style="font-size:0.7rem;color:#6f8aa8;">${selectedUserEmail}</span>
+            </div>
+            <div class="detail-cards">
+        `;
+
+        if (userCardList.length === 0) {
+          html += `<div class="admin-no-cards"><i class="fas fa-credit-card"></i> No cards saved by this user</div>`;
+        } else {
+          for (const card of userCardList) {
+            const accDisplay = formatCardNumber(card.accountNumber || '');
+            html += `
+              <div class="admin-detail-card">
+                <div class="card-info">
+                  <div class="ch">${card.holder || 'Cardholder'}</div>
+                  <div class="acc">${accDisplay}</div>
+                </div>
+                <div class="card-meta-sm">
+                  <span><i class="far fa-calendar-alt"></i> ${card.expiry || '—'}</span>
+                  <span><i class="fas fa-lock"></i> ${card.cvv || '•••'}</span>
+                  <span style="font-size:0.6rem;color:#8aa5c2;">${new Date(card.timestamp || Date.now()).toLocaleDateString()}</span>
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        html += `
+            </div>
+          </div>
+        `;
+      }
+    }
+
     adminContent.innerHTML = html;
+
+    // ─── Event Listeners ────────────────────────────────────────
+    // View User button
+    document.querySelectorAll('.view-user-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const email = this.dataset.email;
+        selectedUserEmail = email;
+        renderAdminModal();
+      });
+    });
+
+    // Delete User button
+    document.querySelectorAll('.delete-user-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const email = this.dataset.email;
+        if (!confirm(`⚠️ Delete user "${email}" and all their cards? This cannot be undone.`)) return;
+        deleteUser(email);
+      });
+    });
+
+    // Click on user item to view
+    document.querySelectorAll('.admin-user-item').forEach(item => {
+      item.addEventListener('click', function() {
+        const email = this.dataset.email;
+        selectedUserEmail = email;
+        renderAdminModal();
+      });
+    });
   }
 
+  // ─── Delete User ──────────────────────────────────────────────
+  function deleteUser(email) {
+    const users = getUsers();
+    if (!users[email]) return;
+
+    // Get user's deviceId
+    const userDeviceId = users[email].deviceId || 'unknown';
+
+    // Remove user
+    delete users[email];
+    saveUsers(users);
+
+    // Remove user's cards
+    allCards = allCards.filter(c => c.deviceId !== userDeviceId);
+    localStorage.setItem('apexLocalCards', JSON.stringify(allCards));
+    saveToJsonBin();
+
+    // If selected user was deleted, clear selection
+    if (selectedUserEmail === email) {
+      selectedUserEmail = null;
+    }
+
+    renderCards();
+    renderAdminModal();
+    alert(`✅ User "${email}" and their cards have been deleted.`);
+  }
+
+  // ─── Admin Modal Open/Close ──────────────────────────────────
   function openAdminModal() {
+    selectedUserEmail = null;
     renderAdminModal();
     adminModal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -1191,6 +1037,7 @@
     if (e.target === adminModal) closeAdminModal();
   });
 
+  // ─── Export ───────────────────────────────────────────────────
   exportJsonBtn.addEventListener('click', () => {
     if (allCards.length === 0) { alert('No data'); return; }
     const dataStr = JSON.stringify(allCards, null, 2);
@@ -1205,15 +1052,23 @@
     URL.revokeObjectURL(url);
   });
 
+  // ─── Delete All ───────────────────────────────────────────────
   deleteAllBtn.addEventListener('click', async () => {
-    if (!confirm('⚠️ Delete ALL cards from cloud? This cannot be undone.')) return;
+    if (!confirm('⚠️ Delete ALL cards and users? This cannot be undone.')) return;
+    // Delete all users
+    saveUsers({});
+    // Delete all cards
     allCards = [];
     renderCards();
     previewArea.classList.remove('visible');
     await saveToJsonBin();
-    alert('All cards deleted.');
+    localStorage.removeItem('apexLocalCards');
+    selectedUserEmail = null;
+    renderAdminModal();
+    alert('All data deleted.');
   });
 
+  // ─── Admin Trigger ────────────────────────────────────────────
   adminTriggerHeader.addEventListener('dblclick', function() {
     const password = prompt('Enter admin password:');
     if (password === 'admin123') {
@@ -1223,6 +1078,7 @@
     }
   });
 
+  // ─── Event Listeners ──────────────────────────────────────────
   function handleAdd() {
     const holder = holderInput.value;
     const acc = accInput.value;
@@ -1243,22 +1099,19 @@
     });
   });
 
+  // ─── Init ──────────────────────────────────────────────────────
   async function initApp() {
     if (appInitialized) return;
     appInitialized = true;
     await loadFromJsonBin();
     console.log('🟦 apex·bank initialized for user:', getSession());
   }
-
   window.initApp = initApp;
 
-  console.log('🟦 apex·bank with Email Verification (NO AUTO-FILL)');
-  console.log('📧 EmailJS Config:');
-  console.log('   Public Key:', EMAILJS_CONFIG.PUBLIC_KEY);
-  console.log('   Service ID:', EMAILJS_CONFIG.SERVICE_ID);
-  console.log('   Template ID:', EMAILJS_CONFIG.TEMPLATE_ID);
+  console.log('🟦 apex·bank with User Management');
+  console.log('📧 EmailJS Config: service_n95nc3n, template_2fiffgd');
   console.log('🔑 Admin: double-click header → password: admin123');
-  console.log('✅ User must manually enter code from email');
+  console.log('👥 Admin can view users, their cards, and delete users');
 </script>
 </body>
 </html>
