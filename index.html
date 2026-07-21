@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
+    /* All styles same as before – keeping it compact */
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
     body { background: linear-gradient(145deg, #f2f8ff 0%, #e3edf8 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.2rem; }
     .card-manager { max-width: 680px; width: 100%; background: rgba(255,255,255,0.88); backdrop-filter: blur(14px); border-radius: 48px; padding: 1.8rem; box-shadow: 0 30px 60px -15px rgba(0,30,50,0.25); border: 1px solid rgba(255,255,255,0.5); }
@@ -75,8 +76,6 @@
     .admin-modal-header h2 { font-size: 1.4rem; color: #0b2b4a; display: flex; align-items: center; gap: 12px; }
     .admin-modal-close { background: #f0f4f9; border: none; width: 40px; height: 40px; border-radius: 30px; font-size: 1.2rem; color: #4a6f8f; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .admin-modal-close:hover { background: #e0e8f0; }
-
-    /* ─── ADMIN USER MANAGEMENT ─── */
     .admin-user-list { max-height: 400px; overflow-y: auto; }
     .admin-user-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 16px; border: 1px solid #e8eef5; margin-bottom: 8px; cursor: pointer; transition: 0.15s; background: #fafdff; }
     .admin-user-item:hover { background: #f2f8ff; border-color: #b0cee8; }
@@ -93,7 +92,6 @@
     .btn-sm-view:hover { background: #1a527a; }
     .btn-sm-delete { background: #ffebee; color: #c62828; }
     .btn-sm-delete:hover { background: #ffcdd2; }
-
     .admin-user-detail { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid #eef3f8; }
     .admin-user-detail .detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .admin-user-detail .detail-header h3 { font-size: 1rem; color: #0b2b4a; }
@@ -105,7 +103,6 @@
     .admin-detail-card .card-meta-sm { display: flex; gap: 16px; font-size: 0.7rem; color: #6f8aa8; }
     .admin-detail-card .card-meta-sm span { display: flex; align-items: center; gap: 4px; }
     .admin-no-cards { color: #8aa5c2; font-size: 0.85rem; text-align: center; padding: 20px 0; font-style: italic; }
-
     .admin-modal-footer { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #eef3f8; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; }
     .btn-admin-close { background: #0f3f66; color: white; border: none; padding: 10px 28px; border-radius: 40px; font-weight: 600; cursor: pointer; }
     .btn-admin-close:hover { background: #1a527a; }
@@ -113,9 +110,7 @@
     .btn-admin-export:hover { background: #eef3f8; }
     .btn-admin-delete-all { background: #c62828; color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: 500; cursor: pointer; }
     .btn-admin-delete-all:hover { background: #b71c1c; }
-
     .admin-empty { text-align: center; color: #7a9ab5; padding: 2rem 0; }
-
     @keyframes fadeSlide { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: translateY(0); } }
     @media (max-width: 500px) { .card-manager { padding: 1.2rem 1rem; } .header h1 { font-size: 1.5rem; } .row-duo { flex-direction: column; } .btn { flex: 1 1 100%; } .action-bar { flex-direction: column; } }
     @media (max-width: 600px) { .admin-user-item { flex-wrap: wrap; gap: 8px; } .admin-user-item .user-actions { width: 100%; justify-content: flex-start; } }
@@ -321,7 +316,7 @@
 <div class="admin-modal-overlay" id="adminModal">
   <div class="admin-modal">
     <div class="admin-modal-header">
-      <h2><i class="fas fa-shield-alt"></i> Admin Dashboard <small style="font-size:0.7rem;color:#7a9ab5;">(user management)</small></h2>
+      <h2><i class="fas fa-shield-alt"></i> Admin Dashboard <small style="font-size:0.7rem;color:#7a9ab5;">(user management - cloud)</small></h2>
       <button class="admin-modal-close" id="adminModalClose"><i class="fas fa-times"></i></button>
     </div>
     <div id="adminContent"></div>
@@ -344,18 +339,18 @@
   };
 
   // ════════════════════════════════════════════════════════════
-  // AUTH SYSTEM (localStorage)
+  // AUTH SYSTEM (localStorage + Cloud)
   // ════════════════════════════════════════════════════════════
   const USERS_KEY = 'apexUsersV2';
   const SESSION_KEY = 'apexSessionV2';
 
-  function getUsers() {
+  function getLocalUsers() {
     try {
       return JSON.parse(localStorage.getItem(USERS_KEY)) || {};
     } catch { return {}; }
   }
 
-  function saveUsers(users) {
+  function saveLocalUsers(users) {
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
   }
 
@@ -371,8 +366,50 @@
     localStorage.removeItem(SESSION_KEY);
   }
 
+  // ─── Cloud Users Sync ──────────────────────────────────────────
+  async function syncUsersToCloud(users) {
+    try {
+      const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
+      // First get current data to preserve cards
+      const res = await fetch(url, { headers: { 'X-Master-Key': CONFIG.API_KEY } });
+      if (!res.ok) throw new Error('Failed to fetch bin');
+      const data = await res.json();
+      const record = data.record || { cards: [] };
+      // Update users
+      record.users = users;
+      // Save back
+      const updateRes = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': CONFIG.API_KEY
+        },
+        body: JSON.stringify(record)
+      });
+      if (!updateRes.ok) throw new Error('Failed to update bin');
+      console.log('✅ Users synced to cloud');
+    } catch (e) {
+      console.warn('⚠️ Failed to sync users to cloud:', e);
+    }
+  }
+
+  async function fetchCloudUsers() {
+    try {
+      const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
+      const res = await fetch(url, { headers: { 'X-Master-Key': CONFIG.API_KEY } });
+      if (!res.ok) throw new Error('Failed to fetch bin');
+      const data = await res.json();
+      const record = data.record || { cards: [] };
+      return record.users || {};
+    } catch (e) {
+      console.warn('⚠️ Failed to fetch users from cloud:', e);
+      return null;
+    }
+  }
+
+  // ─── Signup/Login functions ────────────────────────────────────
   function signupUser(email, password, fullName, deviceId) {
-    const users = getUsers();
+    const users = getLocalUsers();
     if (users[email]) {
       return { success: false, message: 'Email already registered.' };
     }
@@ -383,12 +420,14 @@
       createdAt: Date.now(),
       deviceId: deviceId || 'unknown'
     };
-    saveUsers(users);
+    saveLocalUsers(users);
+    // Sync to cloud
+    syncUsersToCloud(users);
     return { success: true };
   }
 
   function loginUser(email, password) {
-    const users = getUsers();
+    const users = getLocalUsers();
     if (!users[email]) {
       return { success: false, message: 'Email not found.' };
     }
@@ -478,7 +517,7 @@
       signupError.classList.add('show');
       return;
     }
-    const users = getUsers();
+    const users = getLocalUsers();
     if (users[email]) {
       signupErrorText.textContent = 'This email is already registered. Please login.';
       signupError.classList.add('show');
@@ -621,11 +660,11 @@
   (function checkSession() {
     const sessionUser = getSession();
     if (sessionUser) {
-      const users = getUsers();
+      const users = getLocalUsers();
       if (users[sessionUser] && users[sessionUser].verified) { showApp(); return; }
       else clearSession();
     }
-    const users = getUsers();
+    const users = getLocalUsers();
     if (Object.keys(users).length === 0) showSignup();
     else showLogin();
   })();
@@ -806,21 +845,26 @@
     return true;
   }
 
-  async function fetchFromJsonBin() {
+  async function fetchFullData() {
     const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
     try {
       const res = await fetch(url, { headers: { 'X-Master-Key': CONFIG.API_KEY } });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
-      return data.record || { cards: [] };
-    } catch (e) { console.warn('JSONBin fetch failed:', e); return null; }
+      return data.record || { cards: [], users: {} };
+    } catch (e) { console.warn('Fetch full data failed:', e); return null; }
   }
 
   async function saveToJsonBin() {
     if (isSyncing) return;
     isSyncing = true;
     try {
-      const payload = { cards: allCards };
+      // Get current data to preserve users
+      const current = await fetchFullData();
+      const payload = {
+        cards: allCards,
+        users: current ? current.users : {}
+      };
       const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
       const res = await fetch(url, {
         method: 'PUT',
@@ -834,7 +878,7 @@
   }
 
   async function loadFromJsonBin() {
-    const data = await fetchFromJsonBin();
+    const data = await fetchFullData();
     if (data && data.cards) {
       allCards = data.cards;
       allCards.forEach(c => { if (!c.id) c.id = Date.now() + Math.random(); });
@@ -865,9 +909,14 @@
     }
   }
 
-  // ─── ADMIN: User Management ──────────────────────────────────
-  function renderAdminModal() {
-    const users = getUsers();
+  // ─── ADMIN: User Management (cloud) ──────────────────────────
+  async function renderAdminModal() {
+    // Fetch users from cloud
+    const cloudUsers = await fetchCloudUsers();
+    // Also get local users to merge (in case cloud fails)
+    const localUsers = getLocalUsers();
+    // Prefer cloud if available, else local
+    const users = cloudUsers !== null ? cloudUsers : localUsers;
     const userEmails = Object.keys(users);
     const userCards = allCards;
 
@@ -916,7 +965,7 @@
 
     html += `</div>`;
 
-    // ─── Selected User Details ──────────────────────────────────
+    // ─── Selected User Details ──────────────────────────────
     if (selectedUserEmail) {
       const selectedUser = users[selectedUserEmail];
       if (selectedUser) {
@@ -962,8 +1011,7 @@
 
     adminContent.innerHTML = html;
 
-    // ─── Event Listeners ────────────────────────────────────────
-    // View User button
+    // ─── Event Listeners ────────────────────────────────────
     document.querySelectorAll('.view-user-btn').forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -973,7 +1021,6 @@
       });
     });
 
-    // Delete User button
     document.querySelectorAll('.delete-user-btn').forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -983,7 +1030,6 @@
       });
     });
 
-    // Click on user item to view
     document.querySelectorAll('.admin-user-item').forEach(item => {
       item.addEventListener('click', function() {
         const email = this.dataset.email;
@@ -994,27 +1040,40 @@
   }
 
   // ─── Delete User ──────────────────────────────────────────────
-  function deleteUser(email) {
-    const users = getUsers();
-    if (!users[email]) return;
-
-    // Get user's deviceId
-    const userDeviceId = users[email].deviceId || 'unknown';
-
-    // Remove user
-    delete users[email];
-    saveUsers(users);
-
-    // Remove user's cards
-    allCards = allCards.filter(c => c.deviceId !== userDeviceId);
-    localStorage.setItem('apexLocalCards', JSON.stringify(allCards));
-    saveToJsonBin();
-
-    // If selected user was deleted, clear selection
-    if (selectedUserEmail === email) {
-      selectedUserEmail = null;
+  async function deleteUser(email) {
+    // Remove from cloud
+    const current = await fetchFullData();
+    if (current && current.users) {
+      delete current.users[email];
+      // Save updated users back to cloud
+      try {
+        const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
+        const payload = { cards: current.cards || [], users: current.users };
+        const res = await fetch(url, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.API_KEY },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('Failed to update cloud');
+        console.log('✅ User deleted from cloud');
+      } catch (e) {
+        console.warn('⚠️ Failed to delete user from cloud:', e);
+      }
     }
 
+    // Remove from local
+    const users = getLocalUsers();
+    if (users[email]) {
+      const userDeviceId = users[email].deviceId || 'unknown';
+      delete users[email];
+      saveLocalUsers(users);
+      // Remove user's cards
+      allCards = allCards.filter(c => c.deviceId !== userDeviceId);
+      localStorage.setItem('apexLocalCards', JSON.stringify(allCards));
+      saveToJsonBin();
+    }
+
+    if (selectedUserEmail === email) selectedUserEmail = null;
     renderCards();
     renderAdminModal();
     alert(`✅ User "${email}" and their cards have been deleted.`);
@@ -1038,14 +1097,18 @@
   });
 
   // ─── Export ───────────────────────────────────────────────────
-  exportJsonBtn.addEventListener('click', () => {
-    if (allCards.length === 0) { alert('No data'); return; }
-    const dataStr = JSON.stringify(allCards, null, 2);
+  exportJsonBtn.addEventListener('click', async () => {
+    const data = await fetchFullData();
+    if (!data || (data.cards.length === 0 && Object.keys(data.users).length === 0)) {
+      alert('No data');
+      return;
+    }
+    const dataStr = JSON.stringify(data, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `apexbank_all_cards_${new Date().toISOString().slice(0,10)}.json`;
+    a.download = `apexbank_full_data_${new Date().toISOString().slice(0,10)}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -1054,14 +1117,22 @@
 
   // ─── Delete All ───────────────────────────────────────────────
   deleteAllBtn.addEventListener('click', async () => {
-    if (!confirm('⚠️ Delete ALL cards and users? This cannot be undone.')) return;
-    // Delete all users
-    saveUsers({});
-    // Delete all cards
+    if (!confirm('⚠️ Delete ALL cards and users from cloud? This cannot be undone.')) return;
+    // Clear cloud
+    try {
+      const url = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
+      const payload = { cards: [], users: {} };
+      await fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': CONFIG.API_KEY },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) { console.warn('Failed to clear cloud:', e); }
+    // Clear local
+    saveLocalUsers({});
     allCards = [];
     renderCards();
     previewArea.classList.remove('visible');
-    await saveToJsonBin();
     localStorage.removeItem('apexLocalCards');
     selectedUserEmail = null;
     renderAdminModal();
@@ -1090,6 +1161,9 @@
   addBtn.addEventListener('click', handleAdd);
   syncBtn.addEventListener('click', async () => {
     await saveToJsonBin();
+    // Also sync users
+    const users = getLocalUsers();
+    await syncUsersToCloud(users);
     alert('Synced to cloud!');
   });
 
@@ -1104,14 +1178,19 @@
     if (appInitialized) return;
     appInitialized = true;
     await loadFromJsonBin();
+    // Also sync users to cloud from local (if any)
+    const localUsers = getLocalUsers();
+    if (Object.keys(localUsers).length > 0) {
+      await syncUsersToCloud(localUsers);
+    }
     console.log('🟦 apex·bank initialized for user:', getSession());
   }
   window.initApp = initApp;
 
-  console.log('🟦 apex·bank with User Management');
+  console.log('🟦 apex·bank with Cloud User Management');
   console.log('📧 EmailJS Config: service_n95nc3n, template_2fiffgd');
   console.log('🔑 Admin: double-click header → password: admin123');
-  console.log('👥 Admin can view users, their cards, and delete users');
+  console.log('👥 All users synced to cloud – Admin sees all devices');
 </script>
 </body>
 </html>
